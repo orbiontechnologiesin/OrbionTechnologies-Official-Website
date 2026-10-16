@@ -27,7 +27,7 @@ The application uses **Supabase** for PostgreSQL data persistence, user profiles
 
 ### Step 3: Retrieve Production API Keys
 Navigate to **Project Settings > API**:
-- **Project URL**: `https://<your-project-ref>.supabase.co`
+- **Project URL**: `https://hmhcmwvbkgdfkfzcpfgo.supabase.co`
 - **Project API Keys > anon / public**: Your public publishable key.
 
 ---
@@ -63,7 +63,7 @@ In **Supabase Dashboard > Authentication > Providers > Email**:
 1. In [Google Cloud Console](https://console.cloud.google.com/apis/credentials):
    - Create an OAuth 2.0 Client ID (Web application).
    - Set **Authorized redirect URIs** to:
-     `https://<your-project-ref>.supabase.co/auth/v1/callback`
+     `https://hmhcmwvbkgdfkfzcpfgo.supabase.co/auth/v1/callback`
 2. In **Supabase Dashboard > Authentication > Providers > Google**:
    - Enable Google provider.
    - Enter **Client ID** and **Client Secret**.
@@ -72,7 +72,7 @@ In **Supabase Dashboard > Authentication > Providers > Email**:
 1. In [GitHub Developer Settings](https://github.com/settings/developers):
    - Register a new OAuth Application.
    - Set **Authorization callback URL** to:
-     `https://<your-project-ref>.supabase.co/auth/v1/callback`
+     `https://hmhcmwvbkgdfkfzcpfgo.supabase.co/auth/v1/callback`
 2. In **Supabase Dashboard > Authentication > Providers > GitHub**:
    - Enable GitHub provider.
    - Enter **Client ID** and **Client Secret**.
@@ -88,7 +88,7 @@ In **Supabase Dashboard > Authentication > Providers > Email**:
    - **Output Directory**: `.next`
 3. In **Project Settings > Environment Variables**, add:
    - `NEXT_PUBLIC_SITE_URL`: `https://orbion.in`
-   - `NEXT_PUBLIC_SUPABASE_URL`: `https://<your-project-ref>.supabase.co`
+   - `NEXT_PUBLIC_SUPABASE_URL`: `https://hmhcmwvbkgdfkfzcpfgo.supabase.co`
    - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`: `<your-supabase-publishable-key>`
 4. Deploy the project.
 5. In **Domains**, configure `orbion.in` and `www.orbion.in`.
@@ -106,7 +106,7 @@ In **Supabase Dashboard > Authentication > Providers > Email**:
 3. In **Environment**, configure:
    - `NODE_ENV`: `production`
    - `NEXT_PUBLIC_SITE_URL`: `https://<your-app>.onrender.com`
-   - `NEXT_PUBLIC_SUPABASE_URL`: `https://<your-project-ref>.supabase.co`
+   - `NEXT_PUBLIC_SUPABASE_URL`: `https://hmhcmwvbkgdfkfzcpfgo.supabase.co`
    - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`: `<your-supabase-publishable-key>`
 4. Deploy. Next.js binds to `0.0.0.0:$PORT` automatically.
 
@@ -122,7 +122,7 @@ In **Supabase Dashboard > Authentication > Providers > Email**:
    - **Plugin**: `@netlify/plugin-nextjs`
 4. In **Site configuration > Environment variables**, add:
    - `NEXT_PUBLIC_SITE_URL`: `https://<your-site>.netlify.app`
-   - `NEXT_PUBLIC_SUPABASE_URL`: `https://<your-project-ref>.supabase.co`
+   - `NEXT_PUBLIC_SUPABASE_URL`: `https://hmhcmwvbkgdfkfzcpfgo.supabase.co`
    - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`: `<your-supabase-publishable-key>`
 5. Deploy the site.
 

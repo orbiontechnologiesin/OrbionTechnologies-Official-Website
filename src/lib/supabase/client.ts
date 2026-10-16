@@ -13,6 +13,7 @@ export function isSupabaseConfigured(): boolean {
     key &&
     !url.includes('placeholder') &&
     !key.includes('placeholder') &&
+    !key.includes('your-supabase') &&
     url.startsWith('https://')
   );
 }
