@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
-import '@neondatabase/auth-ui/css';
 import './globals.css';
 import { Providers } from './providers';
 import { COMPANY, BRAND_ASSETS } from '@/lib/constants';

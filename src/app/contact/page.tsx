@@ -35,7 +35,7 @@ export default function ContactPage() {
     'General Inquiries',
   ];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage('');
 
@@ -49,13 +49,37 @@ export default function ContactPage() {
       return;
     }
 
+    if (formData.message.trim().length < 10) {
+      setErrorMessage('Please provide a message of at least 10 characters.');
+      return;
+    }
+
     setFormState('submitting');
 
-    // Architecture-ready submission simulation
-    // Ready for future integration with /api/contact or external webhook
-    setTimeout(() => {
+    try {
+      const response = await fetch('/api/inquiries', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        setErrorMessage(result.error || 'Failed to submit inquiry. Please try again.');
+        setFormState('idle');
+        return;
+      }
+
       setFormState('submitted');
-    }, 800);
+    } catch (err) {
+      setErrorMessage(
+        err instanceof Error ? err.message : 'Network error. Please try again later.'
+      );
+      setFormState('idle');
+    }
   };
 
   return (

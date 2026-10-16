@@ -30,7 +30,7 @@ export function LogoutButton() {
       size="sm"
       disabled={loading}
       onClick={handleSignOut}
-      className="gap-2 text-xs"
+      className="gap-2 text-xs font-mono"
     >
       {loading ? (
         <Loader2 className="w-3.5 h-3.5 animate-spin" />

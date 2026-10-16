@@ -28,8 +28,8 @@
   <a href="https://nextjs.org"><img src="https://img.shields.io/badge/Framework-Next.js%2015-050508?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js 15"></a>
   <a href="https://www.typescriptlang.org"><img src="https://img.shields.io/badge/Language-TypeScript%205.8-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript 5.8"></a>
   <a href="https://tailwindcss.com"><img src="https://img.shields.io/badge/Styling-Tailwind%20CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS"></a>
-  <a href="https://www.prisma.io"><img src="https://img.shields.io/badge/ORM-Prisma%207-2D3748?style=for-the-badge&logo=prisma&logoColor=white" alt="Prisma 7"></a>
-  <a href="https://better-auth.com"><img src="https://img.shields.io/badge/Auth-Better%20Auth-10B981?style=for-the-badge" alt="Better Auth"></a>
+  <a href="https://supabase.com"><img src="https://img.shields.io/badge/Backend-Supabase%20Postgres-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase"></a>
+  <a href="https://supabase.com/auth"><img src="https://img.shields.io/badge/Auth-Supabase%20Auth%20SSR-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase Auth"></a>
 </p>
 
 <p align="center">
@@ -55,42 +55,38 @@ Orbion Technologies is an early-stage deep-tech startup building an **AI Operati
 ---
 
 ## 2. Technology Stack
-* **Framework**: [Next.js](https://nextjs.org/) 15 (App Router, Server Components, Route Handlers)
+* **Framework**: [Next.js](https://nextjs.org/) 15 (App Router, Server Components, Route Handlers, Middleware)
 * **Frontend**: [React](https://react.dev/) 19 & [TypeScript](https://www.typescriptlang.org/) 5.8
 * **Styling**: [Tailwind CSS](https://tailwindcss.com/) 3.4 + CSS Variables + PostCSS
-* **ORM & Database**: [Prisma](https://www.prisma.io/) 7.10 with SQLite (`@prisma/adapter-better-sqlite3`)
-* **Authentication**: [Better Auth](https://better-auth.com/) 1.7 with `@better-auth/prisma-adapter`
+* **Backend & Database**: [Supabase](https://supabase.com/) Cloud PostgreSQL with Row Level Security (RLS)
+* **Authentication**: [Supabase Auth SSR](https://supabase.com/docs/guides/auth/server-side-rendering) (`@supabase/ssr` & `@supabase/supabase-js`)
 * **Icons & UI**: [Lucide React](https://lucide.dev/) + Custom SVG brand marks
 * **Runtime**: Node.js 20+
 
 ---
 
-## 3. Authentication Architecture
+## 3. Authentication & Database Architecture
 
-The Orbion Technologies platform includes a local-first authentication system powered by **Better Auth** and **Prisma ORM 7**:
+The Orbion Technologies platform is integrated with **Supabase** for enterprise data and session management:
 
 ```
 Orbion Technologies Next.js (App Router)
        ↓
-Better Auth API Route (/api/auth/[...all])
+Supabase SSR Middleware / Session Sync (src/middleware.ts)
        ↓
-@better-auth/prisma-adapter
+Supabase Auth Service (PKCE OAuth & Email Verification)
        ↓
-Prisma 7 SQLite Adapter (@prisma/adapter-better-sqlite3)
-       ↓
-prisma/dev.db (Local Development Database)
+PostgreSQL Cloud Database (Row Level Security Active)
+   ├── public.profiles (Auth User Metadata & Roles)
+   └── public.inquiries (Intake & Transmission Telemetry)
 ```
 
 ### Key Security & Authentication Features
-* **Credential Authentication**: Secure user sign-up and sign-in with automatic cryptographic password hashing (Scrypt/Argon2).
+* **Mandatory Email Verification**: New email/password registrations must complete cryptographic email verification before accessing protected system nodes.
+* **Multi-Provider Authentication**: Email/Password, Email OTP/Magic Link, Google OAuth, and GitHub OAuth.
 * **Protected Routes**: Server-side dashboard protection (`/dashboard`) that validates sessions before rendering and redirects unauthenticated visitors with sanitized callbacks.
-* **Session Management**: Cryptographically signed tokens stored in the `Session` table with automatic expiration tracking.
-* **Origin & CSRF Defense**: Origin validation active by default; untrusted external origins receive `403 Forbidden`. No wildcard `*` origins allowed.
-* **Zero Client Leakage**: Private environment secrets (`BETTER_AUTH_SECRET`, database paths) remain strictly server-side and are never exposed to browser bundles.
-
-> [!IMPORTANT]
-> **Production Database Notice**:
-> The current SQLite authentication database (`prisma/dev.db`) is intended for local development. Public production deployment requires a remote production database (such as PostgreSQL, MySQL, or Prisma Postgres) accessible to the deployed server runtime.
+* **Row Level Security (RLS)**: Fine-grained PostgreSQL RLS policies enforcing strict isolation between user profiles and restricting inquiry submissions to authorized workflows.
+* **Zero Client Leakage**: Service role keys and secrets remain strictly server-side. Browser bundles only receive public publishable keys.
 
 ---
 
@@ -106,13 +102,13 @@ prisma/dev.db (Local Development Database)
 git clone https://github.com/orbiontechnologiesin/OrbionTechnologies-Official-Website.git
 cd OrbionTechnologies-Official-Website
 
-# 2. Install dependencies (automatically runs prisma generate)
+# 2. Install dependencies
 npm install
 
 # 3. Create your local environment file
 cp .env.example .env.local
 
-# 4. Generate Prisma client & start dev server
+# 4. Start development server
 npm run dev
 ```
 Open [http://localhost:3000](http://localhost:3000) with your browser.
@@ -127,12 +123,6 @@ npm run typecheck
 
 # Run ESLint validation
 npm run lint
-
-# Validate Prisma schema
-npx prisma validate
-
-# Check migration status
-npx prisma migrate status
 
 # Compile production build
 npm run build
@@ -154,31 +144,10 @@ Orbion Technologies is built with **one unified codebase** ready to deploy acros
    - **Build Command**: `npm run build`
    - **Output Directory**: `.next`
 3. Configure Environment Variables in Project Settings:
-   - `BETTER_AUTH_SECRET`: Random 32-byte secret
-   - `BETTER_AUTH_URL`: `https://orbion.in` (or your Vercel deployment domain)
-   - `DATABASE_URL`: Connection string to your production database
+   - `NEXT_PUBLIC_SITE_URL`: `https://orbion.in`
+   - `NEXT_PUBLIC_SUPABASE_URL`: Your Supabase Project URL (`https://<project-ref>.supabase.co`)
+   - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`: Your Supabase Publishable / Anon API Key
 4. Add Custom Domain `orbion.in` under Domains.
-
-### B. Netlify
-1. Connect repository in Netlify dashboard.
-2. Configuration is automated via the repository's `netlify.toml`:
-   - **Build Command**: `npm run build`
-   - **Publish Directory**: `.next`
-   - **Plugin**: `@netlify/plugin-nextjs`
-3. Configure `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`, and `DATABASE_URL` in Site Configuration > Environment Variables.
-
-### C. Render
-1. Create a new **Web Service** on Render connected to `OrbionTechnologies-Official-Website`.
-2. Configure runtime parameters:
-   - **Environment**: `Node`
-   - **Build Command**: `npm install && npm run build`
-   - **Start Command**: `npm start`
-3. Set Environment Variables:
-   - `NODE_ENV`: `production`
-   - `PORT`: `10000` (Render default; Next.js automatically binds to `$PORT`)
-   - `BETTER_AUTH_SECRET`: Random 32-byte secret
-   - `BETTER_AUTH_URL`: Your Render public URL
-   - `DATABASE_URL`: Production database URL
 
 ---
 
@@ -190,12 +159,12 @@ Reference template from `.env.example`:
 | :--- | :--- | :--- | :--- |
 | `NEXT_PUBLIC_SITE_URL` | Canonical site base URL | `https://orbion.in` | Required for SEO & sitemaps |
 | `PORT` | Local and production port | `3000` | Injected by hosting provider |
-| `DATABASE_URL` | Prisma database connection string | `file:./prisma/dev.db` | Remote DB URL required in production |
-| `BETTER_AUTH_SECRET` | 32-byte random cryptographic secret | Private local secret | Required secret in hosting dashboard |
-| `BETTER_AUTH_URL` | Base URL for Better Auth verification | `http://localhost:3000` | Set to canonical production domain |
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project API URL | `https://your-project-ref.supabase.co` | Required for database & auth |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Supabase public/anon API key | Safe public key | Required for client and server auth |
+| `SUPABASE_SERVICE_ROLE_KEY` | Supabase service-role secret (Server-only) | Optional | Kept strictly server-side |
 
 > [!CAUTION]
-> Never commit `.env` or `.env.local` to Git. The `.gitignore` file enforces that all `.env` files and SQLite database files (`*.db`) are strictly ignored.
+> Never commit `.env` or `.env.local` to Git. The `.gitignore` file enforces that all `.env` files are strictly ignored.
 
 ---
 
