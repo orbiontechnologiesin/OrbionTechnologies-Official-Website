@@ -1,5 +1,6 @@
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
+import type { SupabaseClient } from '@supabase/supabase-js';
 
 export function isSupabaseConfigured(): boolean {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
@@ -12,19 +13,36 @@ export function isSupabaseConfigured(): boolean {
     url &&
     key &&
     !url.includes('placeholder') &&
-    !key.includes('placeholder')
+    !key.includes('placeholder') &&
+    url.startsWith('https://')
   );
 }
 
-export async function createClient() {
+export async function createClient(): Promise<SupabaseClient> {
   const cookieStore = await cookies();
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
-  const supabaseKey =
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
+  const supabaseKey = (
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-    'placeholder-anon-key';
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  )?.trim();
 
-  return createServerClient(supabaseUrl, supabaseKey, {
+  if (!isSupabaseConfigured()) {
+    // Return dummy client for build-time static page collection
+    return createServerClient(
+      'https://unconfigured-project.supabase.co',
+      'unconfigured-dummy-key-do-not-use',
+      {
+        cookies: {
+          getAll() {
+            return [];
+          },
+          setAll() {},
+        },
+      }
+    );
+  }
+
+  return createServerClient(supabaseUrl!, supabaseKey!, {
     cookies: {
       getAll() {
         return cookieStore.getAll();
@@ -35,8 +53,7 @@ export async function createClient() {
             cookieStore.set(name, value, options);
           });
         } catch {
-          // The setAll method was called from a Server Component.
-          // Ignored if middleware is refreshing sessions.
+          // setAll called from a Server Component; handled by middleware
         }
       },
     },

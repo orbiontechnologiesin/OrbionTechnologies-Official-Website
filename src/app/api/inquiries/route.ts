@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+import { createClient, isSupabaseConfigured } from '@/lib/supabase/server';
 
 export const dynamic = 'force-dynamic';
 
@@ -99,6 +99,16 @@ export async function POST(request: Request) {
       typeof organization === 'string' && organization.trim().length > 0
         ? organization.trim().slice(0, 150)
         : null;
+
+    if (!isSupabaseConfigured()) {
+      return NextResponse.json(
+        {
+          error:
+            'Inquiry database connection is not configured yet. Please email exobhavinss@gmail.com directly.',
+        },
+        { status: 503 }
+      );
+    }
 
     const supabase = await createClient();
 

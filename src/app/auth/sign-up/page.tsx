@@ -4,6 +4,7 @@ import React, { useState, useTransition, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { supabase } from '@/lib/auth/client';
+import { isSupabaseConfigured } from '@/lib/supabase/client';
 import { Logo, Button, Badge } from '@/components/ui';
 import {
   Eye,
@@ -16,6 +17,7 @@ import {
   CheckCircle2,
   Inbox,
   RefreshCw,
+  AlertTriangle,
 } from 'lucide-react';
 
 function SignUpContent() {
@@ -23,6 +25,7 @@ function SignUpContent() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl') || '/dashboard';
 
+  const isConfigured = isSupabaseConfigured();
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -37,6 +40,13 @@ function SignUpContent() {
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage('');
+
+    if (!isConfigured) {
+      setErrorMessage(
+        'Supabase is not configured yet. Please define NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY in your environment.'
+      );
+      return;
+    }
 
     if (!fullName.trim() || !email.trim() || !password) {
       setErrorMessage('Please fill in all required fields.');
@@ -86,6 +96,14 @@ function SignUpContent() {
 
   const handleOAuthSignUp = async (provider: 'google' | 'github') => {
     setErrorMessage('');
+
+    if (!isConfigured) {
+      setErrorMessage(
+        `Supabase authentication is not configured yet. Please add your Supabase project credentials (NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY) before initiating ${provider} sign-up.`
+      );
+      return;
+    }
+
     try {
       const origin = window.location.origin;
       const { error } = await supabase.auth.signInWithOAuth({
@@ -221,6 +239,19 @@ function SignUpContent() {
             Initialize your organization profile on the Orbion Technologies platform.
           </p>
         </div>
+
+        {!isConfigured && (
+          <div className="p-3.5 bg-amber-950/25 border border-amber-800/40 rounded-xs text-xs font-mono text-amber-300 space-y-1.5">
+            <div className="flex items-center gap-2 font-semibold text-amber-200">
+              <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
+              <span>SUPABASE SETUP REQUIRED</span>
+            </div>
+            <p className="text-[11px] leading-relaxed text-amber-300/90 font-sans">
+              Missing <code>NEXT_PUBLIC_SUPABASE_URL</code> and <code>NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY</code>.
+              Configure your live Supabase project credentials in <code>.env.local</code> or hosting dashboard to enable registration.
+            </p>
+          </div>
+        )}
 
         {/* OAuth Buttons */}
         <div className="grid grid-cols-2 gap-3">
