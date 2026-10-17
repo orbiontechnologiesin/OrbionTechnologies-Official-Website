@@ -16,7 +16,7 @@
   </picture>
 </p>
 
-<h3 align="center">The AI Operating System for Modern Businesses</h3>
+<h3 align="center">The Artificial Intelligence Operating System for Modern Businesses</h3>
 
 <p align="center">
   <em>Autonomous Agentic Workflows • Real-Time Systems Orchestration • Deep-Tech Reliability</em>
