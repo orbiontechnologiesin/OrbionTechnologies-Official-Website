@@ -1,23 +1,26 @@
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
   id            String    @id @default(cuid())
-  name          String?
+  name          String
   email         String    @unique
-  password      String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
   emailVerified Boolean   @default(false)
   image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
   sessions      Session[]
   accounts      Account[]
+  profile       Profile?
+  inquiries     Inquiry[]
+
+  @@map("user")
 }
 
 model Session {
@@ -32,6 +35,7 @@ model Session {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
+  @@map("session")
 }
 
 model Account {
@@ -51,6 +55,7 @@ model Account {
   updatedAt             DateTime  @updatedAt
 
   @@index([userId])
+  @@map("account")
 }
 
 model Verification {
@@ -62,4 +67,39 @@ model Verification {
   updatedAt  DateTime @updatedAt
 
   @@index([identifier])
+  @@map("verification")
+}
+
+model Profile {
+  id          String   @id @default(cuid())
+  userId      String   @unique @map("user_id")
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fullName    String?  @map("full_name")
+  avatarUrl   String?  @map("avatar_url")
+  companyName String?  @map("company_name")
+  jobTitle    String?  @map("job_title")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@index([userId])
+  @@map("profiles")
+}
+
+model Inquiry {
+  id               String   @id @default(cuid())
+  fullName         String   @map("full_name")
+  workEmail        String   @map("work_email")
+  organizationRole String?  @map("organization_role")
+  inquiryTrack     String   @map("inquiry_track")
+  message          String
+  status           String   @default("new")
+  submittedBy      String?  @map("submitted_by")
+  user             User?    @relation(fields: [submittedBy], references: [id], onDelete: SetNull)
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  @@index([submittedBy])
+  @@index([createdAt])
+  @@index([status])
+  @@map("inquiries")
 }

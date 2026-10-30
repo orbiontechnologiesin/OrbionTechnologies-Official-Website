@@ -38,6 +38,7 @@ jobs:
       - name: Run Production Build
         run: npm run build
         env:
-          NEXT_PUBLIC_SUPABASE_URL: "https://placeholder-project.supabase.co"
-          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "placeholder-publishable-key-for-ci-build"
-          NEXT_PUBLIC_SITE_URL: "https://orbion.in"
+          DATABASE_URL: "postgresql://ci_validation:ci_validation@ep-dummy-ci.us-east-2.aws.neon.tech/neondb?sslmode=require"
+          BETTER_AUTH_SECRET: "ci-validation-secret-at-least-thirty-two-chars-long"
+          BETTER_AUTH_URL: "http://localhost:3000"
+          NEXT_PUBLIC_SITE_URL: "https://orbiontechnologies.in"

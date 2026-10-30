@@ -1,23 +1,21 @@
 services:
   - type: web
-    name: orbion-website
-    env: node
-    plan: starter
-    region: ohio
-    buildCommand: npm install && npm run build
-    startCommand: npm run start
-    autoDeploy: true
-    healthCheckPath: /
-    envVars:
-      - key: NODE_ENV
-        value: production
-      - key: NEXT_PUBLIC_SITE_URL
-        sync: false
-      - key: NEXT_PUBLIC_SUPABASE_URL
-        sync: false
-      - key: NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
-        sync: false
-      - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
-        sync: false
-      - key: SUPABASE_SERVICE_ROLE_KEY
-        sync: false
+  name: orbion-website
+  env: node
+  plan: starter
+  region: ohio
+  buildCommand: npm install && npm run build
+  startCommand: npm run start
+  autoDeploy: true
+  healthCheckPath: /
+  envVars:
+    - key: NODE_ENV
+      value: production
+    - key: NEXT_PUBLIC_SITE_URL
+      value: https://orbiontechnologies.in
+    - key: BETTER_AUTH_URL
+      value: https://orbiontechnologies.in
+    - key: DATABASE_URL
+      sync: false
+    - key: BETTER_AUTH_SECRET
+      sync: false

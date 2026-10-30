@@ -28,8 +28,8 @@
   <a href="https://nextjs.org"><img src="https://img.shields.io/badge/Framework-Next.js%2015-050508?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js 15"></a>
   <a href="https://www.typescriptlang.org"><img src="https://img.shields.io/badge/Language-TypeScript%205.8-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript 5.8"></a>
   <a href="https://tailwindcss.com"><img src="https://img.shields.io/badge/Styling-Tailwind%20CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS"></a>
-  <a href="https://supabase.com"><img src="https://img.shields.io/badge/Backend-Supabase%20Postgres-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase"></a>
-  <a href="https://supabase.com/auth"><img src="https://img.shields.io/badge/Auth-Supabase%20Auth%20SSR-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase Auth"></a>
+  <a href="https://neon.tech"><img src="https://img.shields.io/badge/Database-Neon%20PostgreSQL-00E599?style=for-the-badge&logo=postgresql&logoColor=white" alt="Neon PostgreSQL"></a>
+  <a href="https://better-auth.com"><img src="https://img.shields.io/badge/Auth-Better%20Auth-5B4FFF?style=for-the-badge" alt="Better Auth"></a>
 </p>
 
 <p align="center">
@@ -58,8 +58,8 @@ Orbion Technologies is an early-stage deep-tech startup building an **AI Operati
 * **Framework**: [Next.js](https://nextjs.org/) 15 (App Router, Server Components, Route Handlers, Middleware)
 * **Frontend**: [React](https://react.dev/) 19 & [TypeScript](https://www.typescriptlang.org/) 5.8
 * **Styling**: [Tailwind CSS](https://tailwindcss.com/) 3.4 + CSS Variables + PostCSS
-* **Backend & Database**: [Supabase](https://supabase.com/) Cloud PostgreSQL with Row Level Security (RLS)
-* **Authentication**: [Supabase Auth SSR](https://supabase.com/docs/guides/auth/server-side-rendering) (`@supabase/ssr` & `@supabase/supabase-js`)
+* **Backend & Database**: [Neon](https://neon.tech/) Serverless PostgreSQL via Prisma ORM
+* **Authentication**: [Better Auth](https://better-auth.com/) (Self-hosted inside Next.js, Email & Password only)
 * **Icons & UI**: [Lucide React](https://lucide.dev/) + Custom SVG brand marks
 * **Runtime**: Node.js 20+
 
@@ -67,26 +67,27 @@ Orbion Technologies is an early-stage deep-tech startup building an **AI Operati
 
 ## 3. Authentication & Database Architecture
 
-The Orbion Technologies platform is integrated with **Supabase** for enterprise data and session management:
+The Orbion Technologies platform uses **Neon Serverless PostgreSQL** and **Better Auth**:
 
 ```
 Orbion Technologies Next.js (App Router)
        ↓
-Supabase SSR Middleware / Session Sync (src/middleware.ts)
+Session Middleware & Route Protection (src/middleware.ts)
        ↓
-Supabase Auth Service (PKCE OAuth & Email Verification)
+Better Auth Engine (Email & Password, Scrypt Hashes, HTTP-Only Cookies)
        ↓
-PostgreSQL Cloud Database (Row Level Security Active)
-   ├── public.profiles (Auth User Metadata & Roles)
-   └── public.inquiries (Intake & Transmission Telemetry)
+Neon Serverless PostgreSQL Database (Prisma ORM)
+   ├── user, session, account, verification (Better Auth Tables)
+   ├── profiles (User Profile Metadata)
+   └── inquiries (Intake Telemetry)
 ```
 
 ### Key Security & Authentication Features
-* **Mandatory Email Verification**: New email/password registrations must complete cryptographic email verification before accessing protected system nodes.
-* **Multi-Provider Authentication**: Email/Password, Email OTP/Magic Link, Google OAuth, and GitHub OAuth.
+* **Email & Password Authentication**: Dedicated, self-hosted authentication with strict password validation and cryptographic password hashing.
+* **HTTP-Only Session Cookies**: Modern SameSite cookies with session rotation and cryptographic token signing.
 * **Protected Routes**: Server-side dashboard protection (`/dashboard`) that validates sessions before rendering and redirects unauthenticated visitors with sanitized callbacks.
-* **Row Level Security (RLS)**: Fine-grained PostgreSQL RLS policies enforcing strict isolation between user profiles and restricting inquiry submissions to authorized workflows.
-* **Zero Client Leakage**: Service role keys and secrets remain strictly server-side. Browser bundles only receive public publishable keys.
+* **Inquiry Intake with Rate Limiting**: Server-side spam suppression, data validation, and optional user binding for authenticated submissions.
+* **Zero Client Leakage**: Database URLs and authentication secrets remain strictly server-side. No credentials in browser bundles.
 
 ---
 
@@ -144,10 +145,11 @@ Orbion Technologies is built with **one unified codebase** ready to deploy acros
    - **Build Command**: `npm run build`
    - **Output Directory**: `.next`
 3. Configure Environment Variables in Project Settings:
-   - `NEXT_PUBLIC_SITE_URL`: `https://orbion.in`
-   - `NEXT_PUBLIC_SUPABASE_URL`: Your Supabase Project URL (`https://<project-ref>.supabase.co`)
-   - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`: Your Supabase Publishable / Anon API Key
-4. Add Custom Domain `orbion.in` under Domains.
+   - `NEXT_PUBLIC_SITE_URL`: `https://orbiontechnologies.in`
+   - `DATABASE_URL`: Your Neon PostgreSQL Connection String
+   - `BETTER_AUTH_SECRET`: Your generated 32-byte secret
+   - `BETTER_AUTH_URL`: `https://orbiontechnologies.in`
+4. Add Custom Domain `orbiontechnologies.in` under Domains.
 
 ---
 
@@ -157,11 +159,11 @@ Reference template from `.env.example`:
 
 | Variable | Description | Local Default | Production Requirement |
 | :--- | :--- | :--- | :--- |
-| `NEXT_PUBLIC_SITE_URL` | Canonical site base URL | `https://orbion.in` | Required for SEO & sitemaps |
+| `NEXT_PUBLIC_SITE_URL` | Canonical site base URL | `https://orbiontechnologies.in` | Required for SEO & sitemaps |
 | `PORT` | Local and production port | `3000` | Injected by hosting provider |
-| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project API URL | `https://your-project-ref.supabase.co` | Required for database & auth |
-| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Supabase public/anon API key | Safe public key | Required for client and server auth |
-| `SUPABASE_SERVICE_ROLE_KEY` | Supabase service-role secret (Server-only) | Optional | Kept strictly server-side |
+| `DATABASE_URL` | Neon PostgreSQL Connection String | `postgresql://...` | Required for database & auth |
+| `BETTER_AUTH_SECRET` | 32-byte secret for token signing | Local test secret | Required |
+| `BETTER_AUTH_URL` | Canonical Auth URL | `http://localhost:3000` | Required |
 
 > [!CAUTION]
 > Never commit `.env` or `.env.local` to Git. The `.gitignore` file enforces that all `.env` files are strictly ignored.

@@ -2,9 +2,9 @@
 
 import React, { useState, useTransition } from 'react';
 import Link from 'next/link';
-import { supabase } from '@/lib/auth/client';
+import { forgetPassword } from '@/lib/auth/client';
 import { Logo, Button, Badge } from '@/components/ui';
-import { Mail, ArrowRight, ShieldAlert, CheckCircle2, KeyRound } from 'lucide-react';
+import { Mail, ArrowRight, ShieldAlert, CheckCircle2 } from 'lucide-react';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
@@ -21,22 +21,33 @@ export default function ForgotPasswordPage() {
       return;
     }
 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email.trim())) {
+      setErrorMessage('Please enter a valid work email address.');
+      return;
+    }
+
     startTransition(async () => {
       try {
         const origin = window.location.origin;
-        const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
-          redirectTo: `${origin}/auth/callback?next=/auth/reset-password`,
+        const result = await forgetPassword({
+          email: email.trim(),
+          redirectTo: `${origin}/auth/reset-password`,
         });
 
-        if (error) {
-          setErrorMessage(error.message);
+        if (result.error) {
+          setErrorMessage(
+            result.error.message || 'Unable to process password reset request. Please try again.'
+          );
           return;
         }
 
         setIsSuccess(true);
       } catch (err) {
         setErrorMessage(
-          err instanceof Error ? err.message : 'Failed to request password reset. Please try again.'
+          err instanceof Error
+            ? err.message
+            : 'Failed to request password reset. Please try again.'
         );
       }
     });
@@ -44,8 +55,10 @@ export default function ForgotPasswordPage() {
 
   return (
     <div className="min-h-screen bg-canvas pt-28 pb-16 px-4 flex flex-col items-center justify-center relative overflow-hidden">
+      {/* Background Radial Glow */}
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[32rem] h-[32rem] bg-brand-accent/10 rounded-full blur-3xl pointer-events-none" />
 
+      {/* Brand Header */}
       <div className="mb-6 flex flex-col items-center z-10 space-y-3">
         <Link
           href="/"
@@ -56,6 +69,7 @@ export default function ForgotPasswordPage() {
         </Link>
       </div>
 
+      {/* Card Container */}
       <div className="w-full max-w-md relative z-10 bg-surface-card border border-border-hairline rounded-xs p-6 sm:p-8 shadow-subtle space-y-6">
         <div>
           <div className="flex items-center gap-2 mb-2">
@@ -67,7 +81,7 @@ export default function ForgotPasswordPage() {
             Reset Password
           </h1>
           <p className="text-xs sm:text-sm text-text-secondary mt-1">
-            Enter your work email address and we&apos;ll dispatch a secure recovery link.
+            Enter your work email address and we&apos;ll dispatch secure recovery instructions.
           </p>
         </div>
 
@@ -84,9 +98,11 @@ export default function ForgotPasswordPage() {
               <CheckCircle2 className="w-5 h-5" />
             </div>
             <div className="space-y-1">
-              <h3 className="font-sans text-sm font-semibold text-white">Reset Link Dispatched</h3>
+              <h3 className="font-sans text-sm font-semibold text-white">
+                Recovery Request Submitted
+              </h3>
               <p className="text-xs text-text-secondary leading-relaxed">
-                If an account exists for <span className="text-white font-mono">{email}</span>, you will receive password reset instructions shortly.
+                If an account exists for <span className="text-white font-mono">{email}</span>, you will receive password reset instructions.
               </p>
             </div>
             <Link href="/auth/sign-in">
@@ -98,12 +114,12 @@ export default function ForgotPasswordPage() {
         ) : (
           <form onSubmit={handleResetRequest} className="space-y-4">
             <div>
-              <label className="block font-mono text-xs text-text-secondary mb-1.5" htmlFor="email">
+              <label className="block font-mono text-xs text-text-secondary mb-1.5" htmlFor="recovery-email">
                 REGISTERED WORK EMAIL
               </label>
               <div className="relative">
                 <input
-                  id="email"
+                  id="recovery-email"
                   type="email"
                   required
                   autoComplete="email"
@@ -126,7 +142,7 @@ export default function ForgotPasswordPage() {
               {isPending ? (
                 <span className="flex items-center gap-2">
                   <span className="w-3.5 h-3.5 border-2 border-black border-t-transparent rounded-full animate-spin" />
-                  Dispatching Link...
+                  Dispatching Recovery...
                 </span>
               ) : (
                 <span className="flex items-center gap-2">
@@ -135,15 +151,15 @@ export default function ForgotPasswordPage() {
                 </span>
               )}
             </Button>
+
+            <div className="pt-2 text-center text-xs font-sans text-text-secondary border-t border-border-hairline">
+              Remember your credentials?{' '}
+              <Link href="/auth/sign-in" className="text-brand-cyan hover:underline font-medium">
+                Return to Sign In
+              </Link>
+            </div>
           </form>
         )}
-
-        <div className="pt-2 text-center text-xs font-mono text-text-muted border-t border-border-hairline">
-          Remember your credentials?{' '}
-          <Link href="/auth/sign-in" className="text-brand-accent hover:underline">
-            Sign In
-          </Link>
-        </div>
       </div>
     </div>
   );

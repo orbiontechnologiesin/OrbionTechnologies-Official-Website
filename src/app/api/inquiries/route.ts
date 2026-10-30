@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
-import { createClient, isSupabaseConfigured } from '@/lib/supabase/server';
+import { headers } from 'next/headers';
+import { prisma } from '@/lib/prisma';
+import { auth, isDatabaseConfigured } from '@/lib/auth/server';
 
 export const dynamic = 'force-dynamic';
 
@@ -100,7 +102,7 @@ export async function POST(request: Request) {
         ? organization.trim().slice(0, 150)
         : null;
 
-    if (!isSupabaseConfigured()) {
+    if (!isDatabaseConfigured()) {
       return NextResponse.json(
         {
           error:
@@ -110,36 +112,30 @@ export async function POST(request: Request) {
       );
     }
 
-    const supabase = await createClient();
-
-    // Check if user is authenticated to safely bind submitted_by
+    // Check if user is authenticated to safely bind submittedBy
     let submittedBy: string | null = null;
     try {
-      const { data: userData } = await supabase.auth.getUser();
-      if (userData?.user?.id) {
-        submittedBy = userData.user.id;
+      const session = await auth.api.getSession({
+        headers: await headers(),
+      });
+      if (session?.user?.id) {
+        submittedBy = session.user.id;
       }
     } catch {
       submittedBy = null;
     }
 
-    const { error: insertError } = await supabase.from('inquiries').insert({
-      full_name: name.trim(),
-      work_email: email.trim().toLowerCase(),
-      organization_role: sanitizedOrg,
-      inquiry_track: inquiryTrack,
-      message: message.trim(),
-      status: 'new',
-      submitted_by: submittedBy,
+    await prisma.inquiry.create({
+      data: {
+        fullName: name.trim(),
+        workEmail: email.trim().toLowerCase(),
+        organizationRole: sanitizedOrg,
+        inquiryTrack,
+        message: message.trim(),
+        status: 'new',
+        submittedBy,
+      },
     });
-
-    if (insertError) {
-      console.error('[Inquiries Insert Error]:', insertError.message);
-      return NextResponse.json(
-        { error: 'Unable to record your inquiry. Please try again or email us directly.' },
-        { status: 500 }
-      );
-    }
 
     return NextResponse.json({
       success: true,
