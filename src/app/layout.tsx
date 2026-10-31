@@ -102,13 +102,13 @@ const jsonLd = {
   '@graph': [
     {
       '@type': 'Organization',
-      '@id': 'https://orbion.in/#organization',
-      name: 'Orbion Technologies',
-      legalName: 'Orbion Technologies',
-      url: 'https://orbion.in',
+      '@id': `${COMPANY.domain}/#organization`,
+      name: COMPANY.name,
+      legalName: COMPANY.legalName,
+      url: COMPANY.domain,
       logo: {
         '@type': 'ImageObject',
-        url: 'https://orbion.in/brand/png/orbion-logo-white.png',
+        url: `${COMPANY.domain}/brand/png/orbion-logo-white.png`,
       },
       founder: {
         '@type': 'Person',
@@ -143,16 +143,15 @@ const jsonLd = {
           ],
         },
       ],
-      description:
-        'Orbion Technologies is building an AI Operating System for modern businesses, enabling organizations to operate with intelligent, autonomous AI systems capable of executing workflows across business functions.',
+      description: COMPANY.visionSummary,
     },
     {
       '@type': 'WebSite',
-      '@id': 'https://orbion.in/#website',
-      url: 'https://orbion.in',
-      name: 'Orbion Technologies',
+      '@id': `${COMPANY.domain}/#website`,
+      url: COMPANY.domain,
+      name: COMPANY.name,
       publisher: {
-        '@id': 'https://orbion.in/#organization',
+        '@id': `${COMPANY.domain}/#organization`,
       },
     },
   ],

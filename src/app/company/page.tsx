@@ -20,6 +20,15 @@ export const metadata: Metadata = {
   title: 'Company & Vision — About Orbion Technologies',
   description:
     'Orbion Technologies is an early-stage technology startup engineering the AI Operating System for modern businesses. Learn about our origin, thesis, and long-term trajectory.',
+  alternates: {
+    canonical: '/company',
+  },
+  openGraph: {
+    title: 'Company & Vision — About Orbion Technologies',
+    description:
+      'Orbion Technologies is an early-stage technology startup engineering the AI Operating System for modern businesses. Learn about our origin, thesis, and long-term trajectory.',
+    url: '/company',
+  },
 };
 
 export default function CompanyPage() {

@@ -1,4 +1,5 @@
 import type { MetadataRoute } from 'next';
+import { COMPANY } from '@/lib/constants';
 
 export const dynamic = 'force-static';
 
@@ -7,8 +8,8 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/dashboard', '/api/'],
+      disallow: ['/dashboard', '/api/', '/auth/', '/login', '/register'],
     },
-    sitemap: 'https://orbion.in/sitemap.xml',
+    sitemap: `${COMPANY.domain}/sitemap.xml`,
   };
 }

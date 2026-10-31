@@ -2,7 +2,7 @@
 
 > **Aesthetic Archetype**: Architectural Minimalism • Instrument-Grade Technical Discipline • High-Contrast Restraint  
 > **Reference Peers**: Apple, Tesla, Stripe, Linear, Vercel, Palantir, Anthropic  
-> **Brand**: Orbion Technologies (`https://orbion.in`)  
+> **Brand**: Orbion Technologies (`https://orbiontechnologies.in`)  
 
 ---
 

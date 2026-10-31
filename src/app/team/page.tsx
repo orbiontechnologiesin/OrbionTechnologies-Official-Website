@@ -22,6 +22,15 @@ export const metadata: Metadata = {
   title: 'Team — Leadership & Engineering',
   description:
     'Meet the leadership team engineering the AI Operating System at Orbion Technologies. Bhavin Shankur (Founder & CEO) and Apurv Nimbarge (CTO) leading systems architecture and enterprise intelligence.',
+  alternates: {
+    canonical: '/team',
+  },
+  openGraph: {
+    title: 'Team — Leadership & Engineering',
+    description:
+      'Meet the leadership team engineering the AI Operating System at Orbion Technologies. Bhavin Shankur (Founder & CEO) and Apurv Nimbarge (CTO) leading systems architecture and enterprise intelligence.',
+    url: '/team',
+  },
 };
 
 export default function TeamPage() {

@@ -1,9 +1,10 @@
 import type { MetadataRoute } from 'next';
+import { COMPANY } from '@/lib/constants';
 
 export const dynamic = 'force-static';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://orbion.in';
+  const baseUrl = COMPANY.domain;
   const lastModified = new Date();
 
   return [

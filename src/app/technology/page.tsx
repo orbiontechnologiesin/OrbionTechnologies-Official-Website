@@ -22,6 +22,15 @@ export const metadata: Metadata = {
   title: 'Technology & Architecture — The Orbion Technologies Operating Substrate',
   description:
     'Deep-dive into the technical pillars of Orbion Technologies: AI Agents, Model Context Protocol (MCP), LLMs, Hierarchical Memory, Tool Calling, and Deterministic Workflow Orchestration.',
+  alternates: {
+    canonical: '/technology',
+  },
+  openGraph: {
+    title: 'Technology & Architecture — The Orbion Technologies Operating Substrate',
+    description:
+      'Deep-dive into the technical pillars of Orbion Technologies: AI Agents, Model Context Protocol (MCP), LLMs, Hierarchical Memory, Tool Calling, and Deterministic Workflow Orchestration.',
+    url: '/technology',
+  },
 };
 
 export default function TechnologyPage() {
