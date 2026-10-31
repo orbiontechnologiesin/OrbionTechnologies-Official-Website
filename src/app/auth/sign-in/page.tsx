@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState, useTransition, Suspense } from 'react';
+import React, { useState, useEffect, useTransition, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { signIn } from '@/lib/auth/client';
+import { signIn, sendVerificationEmail } from '@/lib/auth/client';
 import { Logo, Button, Badge } from '@/components/ui';
 import {
   Eye,
@@ -13,6 +13,7 @@ import {
   ArrowRight,
   ShieldAlert,
   CheckCircle2,
+  RefreshCw,
 } from 'lucide-react';
 
 function SignInContent() {
@@ -20,20 +21,59 @@ function SignInContent() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl') || '/dashboard';
   const queryError = searchParams.get('error');
+  const queryVerified = searchParams.get('verified');
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(queryError || '');
-  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState(
+    queryVerified === 'true'
+      ? 'Your email address has been verified. You may now sign in to your enterprise account.'
+      : ''
+  );
   const [isPending, startTransition] = useTransition();
+
+  // Unverified account handling state
+  const [isUnverified, setIsUnverified] = useState(false);
+  const [unverifiedEmail, setUnverifiedEmail] = useState('');
+  const [resendCooldown, setResendCooldown] = useState(0);
+  const [isResending, setIsResending] = useState(false);
+  const [resendNotice, setResendNotice] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+
+  // Initialize query error if present
+  useEffect(() => {
+    if (queryError) {
+      if (queryError === 'EMAIL_NOT_VERIFIED') {
+        setIsUnverified(true);
+        setErrorMessage('Your email address has not been verified yet. Please verify your email to access the enterprise console.');
+      } else if (queryError === 'INVALID_TOKEN') {
+        setErrorMessage('The verification link was invalid or has expired. Please request a new verification link below.');
+      } else {
+        setErrorMessage(queryError);
+      }
+    }
+  }, [queryError]);
+
+  // Cooldown countdown
+  useEffect(() => {
+    if (resendCooldown > 0) {
+      const timer = setInterval(() => {
+        setResendCooldown((prev) => (prev > 0 ? prev - 1 : 0));
+      }, 1000);
+      return () => clearInterval(timer);
+    }
+  }, [resendCooldown]);
 
   const handlePasswordSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage('');
     setSuccessMessage('');
+    setIsUnverified(false);
+    setResendNotice(null);
 
-    if (!email.trim() || !password) {
+    const targetEmail = email.trim();
+    if (!targetEmail || !password) {
       setErrorMessage('Please enter both your work email address and password.');
       return;
     }
@@ -41,13 +81,30 @@ function SignInContent() {
     startTransition(async () => {
       try {
         const result = await signIn.email({
-          email: email.trim(),
+          email: targetEmail,
           password,
         });
 
         if (result.error) {
+          const errorCode = (result.error as any).code || '';
+          const errorMsg = result.error.message || '';
+
+          // Check if error is due to unverified email
+          if (
+            errorCode === 'EMAIL_NOT_VERIFIED' ||
+            errorMsg.toLowerCase().includes('email not verified') ||
+            errorMsg.toLowerCase().includes('not verified')
+          ) {
+            setIsUnverified(true);
+            setUnverifiedEmail(targetEmail);
+            setErrorMessage(
+              'Your email address has not been verified yet. Please check your inbox or request a new verification link.'
+            );
+            return;
+          }
+
           setErrorMessage(
-            result.error.message || 'Invalid email or password. Please verify your credentials.'
+            errorMsg || 'Invalid email or password. Please verify your credentials.'
           );
           return;
         }
@@ -60,6 +117,47 @@ function SignInContent() {
         );
       }
     });
+  };
+
+  const handleResendFromSignIn = async () => {
+    const target = unverifiedEmail || email.trim();
+    if (!target) return;
+    if (resendCooldown > 0 || isResending) return;
+
+    setIsResending(true);
+    setResendNotice(null);
+
+    try {
+      const verificationCallback =
+        typeof window !== 'undefined'
+          ? `${window.location.origin}/auth/verify?status=success`
+          : 'https://orbiontechnologies.in/auth/verify?status=success';
+
+      const result = await sendVerificationEmail({
+        email: target,
+        callbackURL: verificationCallback,
+      });
+
+      if (result?.error) {
+        setResendNotice({
+          type: 'error',
+          message: result.error.message || 'Failed to dispatch verification email. Please try again.',
+        });
+      } else {
+        setResendNotice({
+          type: 'success',
+          message: `Verification link dispatched to ${target}. Please inspect your inbox and spam folder.`,
+        });
+        setResendCooldown(60);
+      }
+    } catch {
+      setResendNotice({
+        type: 'error',
+        message: 'Network transmission error. Please retry in a few moments.',
+      });
+    } finally {
+      setIsResending(false);
+    }
   };
 
   return (
@@ -95,18 +193,78 @@ function SignInContent() {
           </p>
         </div>
 
-        {/* Feedback Messages */}
-        {errorMessage && (
-          <div className="p-3 text-xs font-mono text-red-400 bg-red-950/20 border border-red-900/50 rounded-xs flex items-start gap-2">
-            <ShieldAlert className="w-4 h-4 shrink-0 mt-0.5 text-red-400" />
-            <div>{errorMessage}</div>
-          </div>
-        )}
-
+        {/* Success Feedback */}
         {successMessage && (
           <div className="p-3 text-xs font-mono text-emerald-400 bg-emerald-950/20 border border-emerald-900/50 rounded-xs flex items-start gap-2">
             <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-emerald-400" />
             <div>{successMessage}</div>
+          </div>
+        )}
+
+        {/* Unverified Account Dedicated Banner */}
+        {isUnverified && (
+          <div className="p-4 bg-amber-950/20 border border-amber-800/50 rounded-xs space-y-3">
+            <div className="flex items-start gap-2.5">
+              <ShieldAlert className="w-4 h-4 shrink-0 mt-0.5 text-amber-400" />
+              <div>
+                <h2 className="font-mono text-xs font-bold text-amber-300 uppercase tracking-wide">
+                  Email Verification Required
+                </h2>
+                <p className="text-xs text-amber-200/80 mt-1 leading-relaxed">
+                  Your account requires email verification before access is granted. Please confirm your email address.
+                </p>
+              </div>
+            </div>
+
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={handleResendFromSignIn}
+              disabled={resendCooldown > 0 || isResending}
+              className="w-full justify-center h-9 text-xs border-amber-700/60 hover:bg-amber-900/20"
+            >
+              {isResending ? (
+                <span className="flex items-center gap-2">
+                  <RefreshCw className="w-3.5 h-3.5 animate-spin text-amber-400" />
+                  Dispatching Email...
+                </span>
+              ) : resendCooldown > 0 ? (
+                <span className="font-mono text-[11px] text-amber-400">
+                  Resend available in {resendCooldown}s
+                </span>
+              ) : (
+                <span className="flex items-center gap-1.5 text-amber-200">
+                  <RefreshCw className="w-3.5 h-3.5 text-amber-400" />
+                  Resend Verification Email
+                </span>
+              )}
+            </Button>
+
+            {resendNotice && (
+              <div
+                className={`p-2.5 text-[11px] font-mono rounded-xs flex items-start gap-1.5 ${
+                  resendNotice.type === 'success'
+                    ? 'text-emerald-400 bg-emerald-950/30 border border-emerald-900/40'
+                    : 'text-red-400 bg-red-950/30 border border-red-900/40'
+                }`}
+              >
+                {resendNotice.type === 'success' ? (
+                  <CheckCircle2 className="w-3.5 h-3.5 shrink-0 mt-0.5 text-emerald-400" />
+                ) : (
+                  <ShieldAlert className="w-3.5 h-3.5 shrink-0 mt-0.5 text-red-400" />
+                )}
+                <div>{resendNotice.message}</div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* General Error Feedback (when not showing unverified banner) */}
+        {errorMessage && !isUnverified && (
+          <div className="p-3 text-xs font-mono text-red-400 bg-red-950/20 border border-red-900/50 rounded-xs flex items-start gap-2">
+            <ShieldAlert className="w-4 h-4 shrink-0 mt-0.5 text-red-400" />
+            <div>{errorMessage}</div>
           </div>
         )}
 

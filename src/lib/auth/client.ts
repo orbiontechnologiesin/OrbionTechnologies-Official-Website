@@ -24,3 +24,18 @@ export const resetPassword = async (params: {
 }): Promise<{ data?: any; error?: { message?: string } | null }> => {
   return await (authClient as any).resetPassword(params);
 };
+
+export const sendVerificationEmail = async (params: {
+  email: string;
+  callbackURL?: string;
+}): Promise<{ data?: any; error?: { message?: string; code?: string } | null }> => {
+  return await (authClient as any).sendVerificationEmail(params);
+};
+
+export const verifyEmail = async (params: {
+  query: {
+    token: string;
+  };
+}): Promise<{ data?: any; error?: { message?: string; code?: string } | null }> => {
+  return await (authClient as any).verifyEmail(params);
+};

@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState, useTransition, Suspense } from 'react';
+import React, { useState, useEffect, useTransition, Suspense } from 'react';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { signUp } from '@/lib/auth/client';
+import { useSearchParams } from 'next/navigation';
+import { signUp, sendVerificationEmail } from '@/lib/auth/client';
 import { Logo, Button, Badge } from '@/components/ui';
 import {
   Eye,
@@ -14,10 +14,10 @@ import {
   ArrowRight,
   ShieldAlert,
   CheckCircle2,
+  RefreshCw,
 } from 'lucide-react';
 
 function SignUpContent() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl') || '/dashboard';
 
@@ -27,13 +27,28 @@ function SignUpContent() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
   const [isPending, startTransition] = useTransition();
+
+  // Verification Pending Screen state
+  const [isRegisteredPending, setIsRegisteredPending] = useState(false);
+  const [registeredEmail, setRegisteredEmail] = useState('');
+  const [cooldown, setCooldown] = useState(60);
+  const [isResending, setIsResending] = useState(false);
+  const [resendNotice, setResendNotice] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+
+  // 60-second cooldown timer
+  useEffect(() => {
+    if (isRegisteredPending && cooldown > 0) {
+      const timer = setInterval(() => {
+        setCooldown((prev) => (prev > 0 ? prev - 1 : 0));
+      }, 1000);
+      return () => clearInterval(timer);
+    }
+  }, [isRegisteredPending, cooldown]);
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage('');
-    setSuccessMessage('');
 
     if (!fullName.trim() || !email.trim() || !password || !confirmPassword) {
       setErrorMessage('Please fill in all required fields.');
@@ -63,8 +78,9 @@ function SignUpContent() {
 
     startTransition(async () => {
       try {
+        const targetEmail = email.trim();
         const result = await signUp.email({
-          email: email.trim(),
+          email: targetEmail,
           password,
           name: fullName.trim(),
         });
@@ -79,11 +95,11 @@ function SignUpContent() {
           return;
         }
 
-        setSuccessMessage('Account created successfully. Initializing workspace...');
-        setTimeout(() => {
-          router.push(callbackUrl);
-          router.refresh();
-        }, 1000);
+        // On successful registration with required email verification:
+        // Transition to Verification Pending Screen
+        setRegisteredEmail(targetEmail);
+        setIsRegisteredPending(true);
+        setCooldown(60);
       } catch (err) {
         setErrorMessage(
           err instanceof Error ? err.message : 'Registration failed. Please try again.'
@@ -92,6 +108,185 @@ function SignUpContent() {
     });
   };
 
+  const handleResendVerification = async () => {
+    if (cooldown > 0 || isResending) return;
+    setIsResending(true);
+    setResendNotice(null);
+
+    try {
+      const verificationCallback =
+        typeof window !== 'undefined'
+          ? `${window.location.origin}/auth/verify?status=success`
+          : 'https://orbiontechnologies.in/auth/verify?status=success';
+
+      const result = await sendVerificationEmail({
+        email: registeredEmail,
+        callbackURL: verificationCallback,
+      });
+
+      if (result?.error) {
+        setResendNotice({
+          type: 'error',
+          message: result.error.message || 'Failed to dispatch verification email. Please try again.',
+        });
+      } else {
+        setResendNotice({
+          type: 'success',
+          message: 'A new verification link has been dispatched to your inbox.',
+        });
+        setCooldown(60);
+      }
+    } catch {
+      setResendNotice({
+        type: 'error',
+        message: 'Network transmission error. Please retry in a few moments.',
+      });
+    } finally {
+      setIsResending(false);
+    }
+  };
+
+  // ----------------------------------------------------
+  // Verification Pending Screen (Post-Registration)
+  // ----------------------------------------------------
+  if (isRegisteredPending) {
+    return (
+      <div className="min-h-screen bg-canvas pt-28 pb-16 px-4 flex flex-col items-center justify-center relative overflow-hidden">
+        {/* Background Radial Glow */}
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[32rem] h-[32rem] bg-brand-cyan/10 rounded-full blur-3xl pointer-events-none" />
+
+        {/* Brand Header */}
+        <div className="mb-6 flex flex-col items-center z-10 space-y-3">
+          <Link
+            href="/"
+            className="inline-block hover:opacity-85 transition-opacity"
+            aria-label="Orbion Technologies Home"
+          >
+            <Logo priority size="md" />
+          </Link>
+          <div className="flex items-center gap-2">
+            <Badge variant="status" indicatorColor="cyan">
+              VERIFICATION PENDING
+            </Badge>
+            <span className="font-mono text-xs text-text-muted">ENTERPRISE IDENTITY</span>
+          </div>
+        </div>
+
+        {/* Card Container */}
+        <div className="w-full max-w-md relative z-10 bg-surface-card border border-border-hairline rounded-xs p-6 sm:p-8 shadow-subtle space-y-6">
+          <div className="text-center space-y-2">
+            <div className="w-12 h-12 rounded-full bg-brand-cyan/15 border border-brand-cyan/30 flex items-center justify-center text-brand-cyan mx-auto mb-3">
+              <Mail className="w-6 h-6" />
+            </div>
+            <h1 className="text-xl sm:text-2xl font-semibold text-white tracking-tight">
+              Verify Your Email
+            </h1>
+            <p className="text-xs sm:text-sm text-text-secondary leading-relaxed">
+              We dispatched an encrypted verification link to confirm your organizational identity.
+            </p>
+          </div>
+
+          {/* Monospace Target Email Display */}
+          <div className="bg-void border border-border-hairline rounded-xs p-3.5 text-center">
+            <span className="block font-mono text-[11px] text-text-muted uppercase tracking-wider mb-1">
+              Target Email Address
+            </span>
+            <span className="font-mono text-sm text-brand-cyan font-semibold break-all">
+              {registeredEmail}
+            </span>
+          </div>
+
+          {/* Advisory Notice */}
+          <div className="p-3 bg-void/50 border border-border-hairline rounded-xs text-xs text-text-secondary leading-relaxed space-y-1">
+            <p>
+              Please inspect your email inbox. If you do not see the message within a minute, check your <span className="text-white font-medium">spam or junk folder</span>.
+            </p>
+            <p className="font-mono text-[11px] text-text-muted">
+              Security Notice: The verification link remains valid for 1 hour.
+            </p>
+          </div>
+
+          {/* Resend Status Feedback */}
+          {resendNotice && (
+            <div
+              className={`p-3 text-xs font-mono rounded-xs flex items-start gap-2 ${
+                resendNotice.type === 'success'
+                  ? 'text-emerald-400 bg-emerald-950/20 border border-emerald-900/50'
+                  : 'text-red-400 bg-red-950/20 border border-red-900/50'
+              }`}
+            >
+              {resendNotice.type === 'success' ? (
+                <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-emerald-400" />
+              ) : (
+                <ShieldAlert className="w-4 h-4 shrink-0 mt-0.5 text-red-400" />
+              )}
+              <div>{resendNotice.message}</div>
+            </div>
+          )}
+
+          {/* Resend Action with 60s Cooldown */}
+          <div className="space-y-3">
+            <Button
+              type="button"
+              variant="outline"
+              size="md"
+              onClick={handleResendVerification}
+              disabled={cooldown > 0 || isResending}
+              className="w-full justify-center h-11"
+            >
+              {isResending ? (
+                <span className="flex items-center gap-2">
+                  <RefreshCw className="w-4 h-4 animate-spin text-brand-cyan" />
+                  Dispatching Email...
+                </span>
+              ) : cooldown > 0 ? (
+                <span className="font-mono text-xs text-text-muted">
+                  Resend available in {cooldown}s
+                </span>
+              ) : (
+                <span className="flex items-center gap-2 text-white">
+                  <RefreshCw className="w-4 h-4 text-brand-cyan" />
+                  Resend Verification Email
+                </span>
+              )}
+            </Button>
+
+            <Link
+              href={`/auth/sign-in?callbackUrl=${encodeURIComponent(callbackUrl)}`}
+              className="block"
+            >
+              <Button variant="primary" size="md" className="w-full justify-center h-11">
+                <span className="flex items-center gap-2">
+                  Return to Sign In
+                  <ArrowRight className="w-4 h-4" />
+                </span>
+              </Button>
+            </Link>
+          </div>
+
+          {/* Reset Action */}
+          <div className="pt-2 text-center text-xs font-sans text-text-secondary border-t border-border-hairline">
+            Entered the wrong email?{' '}
+            <button
+              type="button"
+              onClick={() => {
+                setIsRegisteredPending(false);
+                setErrorMessage('');
+                setResendNotice(null);
+              }}
+              className="text-brand-cyan hover:underline font-medium cursor-pointer"
+            >
+              Register with another address
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ----------------------------------------------------
+  // Initial Registration Form
+  // ----------------------------------------------------
   return (
     <div className="min-h-screen bg-canvas pt-28 pb-16 px-4 flex flex-col items-center justify-center relative overflow-hidden">
       {/* Background Radial Glow */}
@@ -130,13 +325,6 @@ function SignUpContent() {
           <div className="p-3 text-xs font-mono text-red-400 bg-red-950/20 border border-red-900/50 rounded-xs flex items-start gap-2">
             <ShieldAlert className="w-4 h-4 shrink-0 mt-0.5 text-red-400" />
             <div>{errorMessage}</div>
-          </div>
-        )}
-
-        {successMessage && (
-          <div className="p-3 text-xs font-mono text-emerald-400 bg-emerald-950/20 border border-emerald-900/50 rounded-xs flex items-start gap-2">
-            <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-emerald-400" />
-            <div>{successMessage}</div>
           </div>
         )}
 
