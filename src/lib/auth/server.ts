@@ -17,6 +17,32 @@ export const auth = betterAuth({
   }),
   baseURL: siteUrl,
   secret: process.env.BETTER_AUTH_SECRET,
+  trustedOrigins: [
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    'https://orbiontechnologies.in',
+    'https://www.orbiontechnologies.in',
+  ],
+  databaseHooks: {
+    user: {
+      create: {
+        after: async (user) => {
+          try {
+            await prisma.profile.upsert({
+              where: { userId: user.id },
+              update: { fullName: user.name },
+              create: {
+                userId: user.id,
+                fullName: user.name,
+              },
+            });
+          } catch (e) {
+            console.error('[Auth Hook] Failed to initialize profile:', e);
+          }
+        },
+      },
+    },
+  },
   emailAndPassword: {
     enabled: true,
     minPasswordLength: 8,

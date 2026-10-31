@@ -33,7 +33,7 @@ export default function VerifyPage() {
             Account Ready
           </h1>
           <p className="text-xs sm:text-sm text-text-secondary leading-relaxed">
-            Orbion Technologies is operating on direct email and password authentication backed by Neon PostgreSQL.
+            Orbion Technologies is operating on direct email and password authentication backed by Supabase PostgreSQL.
           </p>
         </div>
 

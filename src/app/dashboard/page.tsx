@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { auth } from '@/lib/auth/server';
 import { prisma } from '@/lib/prisma';
 import { Badge, Button } from '@/components/ui';
-import { LogoutButton } from './dashboard-client';
+import { LogoutButton, ProfileEditor } from './dashboard-client';
 import {
   Activity,
   Cpu,
@@ -47,7 +47,7 @@ export default async function DashboardPage() {
     redirect('/auth/sign-in?callbackUrl=/dashboard');
   }
 
-  // Fetch profile data from Neon PostgreSQL profiles table
+  // Fetch profile data from Supabase PostgreSQL profiles table
   let profile = null;
   try {
     profile = await prisma.profile.findUnique({
@@ -67,7 +67,7 @@ export default async function DashboardPage() {
           <div>
             <div className="flex items-center gap-2 mb-2">
               <Badge variant="status" indicatorColor="cyan">
-                NEON + BETTER AUTH ACTIVE
+                SUPABASE + BETTER AUTH ACTIVE
               </Badge>
               <span className="font-mono text-[10px] text-text-muted">
                 SESSION_ID: {String(session.id || user.id).slice(0, 12)}...
@@ -98,9 +98,9 @@ export default async function DashboardPage() {
               <span className="font-mono text-[11px] uppercase tracking-wider">Cloud Database</span>
               <Database className="w-4 h-4 text-brand-cyan" />
             </div>
-            <div className="text-xl font-semibold text-text-pure font-mono">Neon PostgreSQL</div>
+            <div className="text-xl font-semibold text-text-pure font-mono">Supabase PostgreSQL</div>
             <div className="text-[11px] text-text-secondary">
-              Provider: <code className="text-text-muted font-mono">Neon Serverless SQL</code>
+              Provider: <code className="text-text-muted font-mono">Supabase PostgreSQL</code>
             </div>
           </div>
 
@@ -161,6 +161,20 @@ export default async function DashboardPage() {
                 <span className="text-text-primary block">{displayName}</span>
               </div>
 
+              {profile?.companyName && (
+                <div>
+                  <span className="text-text-muted uppercase text-[10px] block mb-1">Organization</span>
+                  <span className="text-text-primary block">{profile.companyName}</span>
+                </div>
+              )}
+
+              {profile?.jobTitle && (
+                <div>
+                  <span className="text-text-muted uppercase text-[10px] block mb-1">Title / Role</span>
+                  <span className="text-text-primary block">{profile.jobTitle}</span>
+                </div>
+              )}
+
               <div>
                 <span className="text-text-muted uppercase text-[10px] block mb-1">Email Endpoint</span>
                 <span className="text-text-primary block break-all">{user.email}</span>
@@ -190,6 +204,12 @@ export default async function DashboardPage() {
                   </div>
                 </div>
               )}
+
+              <ProfileEditor
+                initialFullName={displayName}
+                initialCompanyName={profile?.companyName}
+                initialJobTitle={profile?.jobTitle}
+              />
             </div>
           </div>
 
@@ -212,7 +232,7 @@ export default async function DashboardPage() {
                   &gt; Orbion Technologies Architecture v1.0.0 (Node Next.js 15 / React 19)
                 </p>
                 <p className="text-text-muted">
-                  &gt; Backend Engine: Neon Serverless PostgreSQL + Better Auth
+                  &gt; Backend Engine: Supabase PostgreSQL + Better Auth
                 </p>
                 <p className="text-emerald-400">
                   &gt; Session Status: Active session for {user.email}.
