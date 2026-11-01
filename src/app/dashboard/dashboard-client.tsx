@@ -69,10 +69,10 @@ export function ThemeShiftButton() {
       <Button
         variant="secondary"
         size="sm"
-        className="gap-2 text-xs font-mono dark:bg-surface-card bg-white dark:border-border-hairline border-[#E7E8ED] dark:text-text-primary text-[#17181C]"
+        className="h-9 px-3 gap-2 font-sans font-medium text-xs whitespace-nowrap shrink-0 dark:bg-surface-card bg-white dark:border-border-hairline border-[#E7E8ED] dark:text-text-primary text-[#17181C]"
       >
-        <Moon className="w-3.5 h-3.5 text-brand-accent" />
-        <span>Theme Shift</span>
+        <Moon className="w-3.5 h-3.5 text-brand-accent shrink-0" />
+        <span className="whitespace-nowrap">Theme Shift</span>
       </Button>
     );
   }
@@ -82,19 +82,19 @@ export function ThemeShiftButton() {
       variant="secondary"
       size="sm"
       onClick={toggleTheme}
-      className="gap-2 text-xs font-mono dark:bg-surface-card bg-white dark:border-border-hairline border-[#E7E8ED] dark:text-text-primary text-[#17181C] hover:border-brand-accent/40"
+      className="h-9 px-3 gap-2 font-sans font-medium text-xs whitespace-nowrap shrink-0 dark:bg-surface-card bg-white dark:border-border-hairline border-[#E7E8ED] dark:text-text-primary text-[#17181C] hover:border-brand-accent/40"
       title={isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
       aria-label="Toggle Theme"
     >
       {isDark ? (
         <>
-          <Sun className="w-3.5 h-3.5 text-brand-accent" />
-          <span>Light Mode</span>
+          <Sun className="w-3.5 h-3.5 text-brand-accent shrink-0" />
+          <span className="whitespace-nowrap">Light Mode</span>
         </>
       ) : (
         <>
-          <Moon className="w-3.5 h-3.5 text-brand-accent" />
-          <span>Dark Mode</span>
+          <Moon className="w-3.5 h-3.5 text-brand-accent shrink-0" />
+          <span className="whitespace-nowrap">Dark Mode</span>
         </>
       )}
     </Button>
@@ -125,14 +125,14 @@ export function LogoutButton() {
       size="sm"
       disabled={loading}
       onClick={handleSignOut}
-      className="gap-2 text-xs font-mono text-red-400 hover:text-red-300 dark:hover:bg-red-950/20 hover:bg-red-50 hover:border-red-500/30"
+      className="h-9 px-3 gap-2 font-sans font-medium text-xs whitespace-nowrap shrink-0 text-red-400 hover:text-red-300 dark:hover:bg-red-950/20 hover:bg-red-50 hover:border-red-500/30"
     >
       {loading ? (
-        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+        <Loader2 className="w-3.5 h-3.5 animate-spin shrink-0" />
       ) : (
-        <LogOut className="w-3.5 h-3.5" />
+        <LogOut className="w-3.5 h-3.5 shrink-0" />
       )}
-      <span>Sign Out</span>
+      <span className="whitespace-nowrap">Sign Out</span>
     </Button>
   );
 }
@@ -154,14 +154,14 @@ export function CopyButton({ text, label = 'Copy' }: { text: string; label?: str
     <button
       type="button"
       onClick={handleCopy}
-      className="inline-flex items-center justify-center p-1 rounded-xs text-text-muted hover:text-text-pure dark:hover:text-white transition-colors cursor-pointer"
+      className="inline-flex items-center justify-center p-1 rounded-xs text-text-muted hover:text-text-pure dark:hover:text-white transition-colors cursor-pointer shrink-0 whitespace-nowrap"
       title={copied ? 'Copied to clipboard' : label}
       aria-label={copied ? 'Copied' : label}
     >
       {copied ? (
-        <Check className="w-3.5 h-3.5 text-emerald-400" />
+        <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
       ) : (
-        <Copy className="w-3.5 h-3.5" />
+        <Copy className="w-3.5 h-3.5 shrink-0" />
       )}
     </button>
   );
@@ -237,10 +237,10 @@ export function ProfileEditor({
           setError('');
           setSuccess('');
         }}
-        className="w-full justify-center gap-2 font-mono text-xs h-10 mt-2"
+        className="w-full justify-center gap-2 font-sans font-medium text-xs sm:text-[13px] whitespace-nowrap shrink-0 h-10 mt-3"
       >
-        <Edit3 className="w-3.5 h-3.5" />
-        <span>Update Profile Information</span>
+        <Edit3 className="w-3.5 h-3.5 shrink-0" />
+        <span className="whitespace-nowrap">Update Profile Information</span>
       </Button>
 
       {isOpen && (
@@ -248,8 +248,8 @@ export function ProfileEditor({
           <div className="relative w-full max-w-md dark:bg-surface-card bg-white border dark:border-border-hairline border-[#E7E8ED] rounded-sm p-6 shadow-2xl space-y-5">
             <div className="flex items-center justify-between border-b dark:border-border-hairline border-[#E7E8ED] pb-3">
               <div className="flex items-center gap-2">
-                <Edit3 className="w-4 h-4 text-brand-accent" />
-                <h3 className="text-sm font-semibold dark:text-text-pure text-[#17181C] uppercase tracking-wider font-mono">
+                <Edit3 className="w-4 h-4 text-brand-accent shrink-0" />
+                <h3 className="text-sm font-semibold dark:text-text-pure text-[#17181C] font-sans">
                   Edit User Profile
                 </h3>
               </div>
@@ -263,35 +263,35 @@ export function ProfileEditor({
             </div>
 
             {error && (
-              <div className="p-2.5 text-xs font-mono text-red-400 bg-red-950/20 border border-red-900/50 rounded-xs flex items-center gap-2">
+              <div className="p-2.5 text-xs font-sans text-red-400 bg-red-950/20 border border-red-900/50 rounded-xs flex items-center gap-2">
                 <ShieldAlert className="w-4 h-4 shrink-0 text-red-400" />
                 <span>{error}</span>
               </div>
             )}
 
             {success && (
-              <div className="p-2.5 text-xs font-mono text-emerald-400 bg-emerald-950/20 border border-emerald-900/50 rounded-xs flex items-center gap-2">
+              <div className="p-2.5 text-xs font-sans text-emerald-400 bg-emerald-950/20 border border-emerald-900/50 rounded-xs flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-400" />
                 <span>{success}</span>
               </div>
             )}
 
-            <form onSubmit={handleUpdate} className="space-y-4 text-xs font-mono">
+            <form onSubmit={handleUpdate} className="space-y-4 text-xs font-sans">
               <div>
-                <label className="block dark:text-text-secondary text-[#52525B] uppercase text-[10px] mb-1">
+                <label className="block dark:text-text-secondary text-[#52525B] text-xs font-medium mb-1">
                   Full Name
                 </label>
                 <input
                   type="text"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  className="w-full dark:bg-surface-subtle bg-[#F3F4F7] border dark:border-border-hairline border-[#E7E8ED] rounded-xs px-3 py-2 dark:text-text-pure text-[#17181C] focus:outline-none focus:border-brand-accent/60"
+                  className="w-full dark:bg-surface-subtle bg-[#F3F4F7] border dark:border-border-hairline border-[#E7E8ED] rounded-xs px-3 py-2 font-sans dark:text-text-pure text-[#17181C] focus:outline-none focus:border-brand-accent/60"
                   required
                 />
               </div>
 
               <div>
-                <label className="block dark:text-text-secondary text-[#52525B] uppercase text-[10px] mb-1">
+                <label className="block dark:text-text-secondary text-[#52525B] text-xs font-medium mb-1">
                   Company / Organization
                 </label>
                 <input
@@ -299,12 +299,12 @@ export function ProfileEditor({
                   value={companyName}
                   onChange={(e) => setCompanyName(e.target.value)}
                   placeholder="e.g. Orbion Technologies"
-                  className="w-full dark:bg-surface-subtle bg-[#F3F4F7] border dark:border-border-hairline border-[#E7E8ED] rounded-xs px-3 py-2 dark:text-text-pure text-[#17181C] focus:outline-none focus:border-brand-accent/60"
+                  className="w-full dark:bg-surface-subtle bg-[#F3F4F7] border dark:border-border-hairline border-[#E7E8ED] rounded-xs px-3 py-2 font-sans dark:text-text-pure text-[#17181C] focus:outline-none focus:border-brand-accent/60"
                 />
               </div>
 
               <div>
-                <label className="block dark:text-text-secondary text-[#52525B] uppercase text-[10px] mb-1">
+                <label className="block dark:text-text-secondary text-[#52525B] text-xs font-medium mb-1">
                   Job Title / Role
                 </label>
                 <input
@@ -312,7 +312,7 @@ export function ProfileEditor({
                   value={jobTitle}
                   onChange={(e) => setJobTitle(e.target.value)}
                   placeholder="e.g. Senior Systems Architect"
-                  className="w-full dark:bg-surface-subtle bg-[#F3F4F7] border dark:border-border-hairline border-[#E7E8ED] rounded-xs px-3 py-2 dark:text-text-pure text-[#17181C] focus:outline-none focus:border-brand-accent/60"
+                  className="w-full dark:bg-surface-subtle bg-[#F3F4F7] border dark:border-border-hairline border-[#E7E8ED] rounded-xs px-3 py-2 font-sans dark:text-text-pure text-[#17181C] focus:outline-none focus:border-brand-accent/60"
                 />
               </div>
 
@@ -323,10 +323,17 @@ export function ProfileEditor({
                   size="sm"
                   onClick={() => setIsOpen(false)}
                   disabled={loading}
+                  className="font-sans font-medium text-xs whitespace-nowrap shrink-0"
                 >
                   Cancel
                 </Button>
-                <Button type="submit" variant="primary" size="sm" disabled={loading}>
+                <Button
+                  type="submit"
+                  variant="primary"
+                  size="sm"
+                  disabled={loading}
+                  className="font-sans font-medium text-xs whitespace-nowrap shrink-0"
+                >
                   {loading ? 'Saving...' : 'Save Profile'}
                 </Button>
               </div>
@@ -363,18 +370,18 @@ export function TelemetryConsole() {
       {/* Console Header & Tabs */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b dark:border-border-hairline border-[#E7E8ED] pb-4">
         <div className="flex items-center gap-2">
-          <Terminal className="w-4 h-4 text-brand-cyan" />
-          <h2 className="text-sm font-semibold dark:text-text-pure text-[#17181C] uppercase tracking-wider font-mono">
+          <Terminal className="w-4 h-4 text-brand-cyan shrink-0" />
+          <h2 className="text-sm font-semibold dark:text-text-pure text-[#17181C] font-sans">
             Diagnostic Telemetry Console
           </h2>
         </div>
 
         {/* Tab Controls */}
-        <div className="flex items-center dark:bg-surface-subtle bg-[#F3F4F7] p-1 rounded-xs gap-1 font-mono text-xs">
+        <div className="flex items-center dark:bg-surface-subtle bg-[#F3F4F7] p-1 rounded-xs gap-1 font-sans text-xs">
           <button
             type="button"
             onClick={() => setActiveTab('runtime')}
-            className={`px-3 py-1 rounded-xs transition-colors cursor-pointer ${
+            className={`px-3 py-1 rounded-xs transition-colors cursor-pointer whitespace-nowrap shrink-0 font-medium ${
               activeTab === 'runtime'
                 ? 'dark:bg-surface-elevated bg-white dark:text-text-pure text-[#17181C] font-semibold shadow-xs'
                 : 'dark:text-text-muted text-[#71717A] hover:text-[#17181C] dark:hover:text-white'
@@ -385,7 +392,7 @@ export function TelemetryConsole() {
           <button
             type="button"
             onClick={() => setActiveTab('mcp')}
-            className={`px-3 py-1 rounded-xs transition-colors cursor-pointer ${
+            className={`px-3 py-1 rounded-xs transition-colors cursor-pointer whitespace-nowrap shrink-0 font-medium ${
               activeTab === 'mcp'
                 ? 'dark:bg-surface-elevated bg-white dark:text-text-pure text-[#17181C] font-semibold shadow-xs'
                 : 'dark:text-text-muted text-[#71717A] hover:text-[#17181C] dark:hover:text-white'
@@ -396,7 +403,7 @@ export function TelemetryConsole() {
           <button
             type="button"
             onClick={() => setActiveTab('security')}
-            className={`px-3 py-1 rounded-xs transition-colors cursor-pointer ${
+            className={`px-3 py-1 rounded-xs transition-colors cursor-pointer whitespace-nowrap shrink-0 font-medium ${
               activeTab === 'security'
                 ? 'dark:bg-surface-elevated bg-white dark:text-text-pure text-[#17181C] font-semibold shadow-xs'
                 : 'dark:text-text-muted text-[#71717A] hover:text-[#17181C] dark:hover:text-white'
@@ -408,11 +415,11 @@ export function TelemetryConsole() {
       </div>
 
       {/* Terminal Display Window */}
-      <div className="dark:bg-[#070709] bg-[#0E0E12] border dark:border-border-hairline border-neutral-800 rounded-xs p-5 font-mono text-xs flex flex-col justify-between min-h-[260px] text-neutral-300">
+      <div className="dark:bg-[#070709] bg-[#0E0E12] border dark:border-border-hairline border-neutral-800 rounded-xs p-5 flex flex-col justify-between min-h-[260px] text-neutral-300">
         {/* Terminal Title Bar */}
-        <div className="flex items-center justify-between text-neutral-500 pb-3 border-b border-neutral-800/80 text-[11px]">
+        <div className="flex items-center justify-between text-neutral-500 pb-3 border-b border-neutral-800/80 font-mono text-[11px]">
           <span>CONTAINER: pod-orb-enclave-01a</span>
-          <span>STREAM: STANDBY (0 ingestion pipelines active)</span>
+          <span>STREAM: STANDBY (0 pipelines active)</span>
         </div>
 
         {/* Truthful Empty State Required by Prompt */}
@@ -420,13 +427,13 @@ export function TelemetryConsole() {
           <div className="w-10 h-10 rounded-full dark:bg-surface-card bg-neutral-900 border border-neutral-800 flex items-center justify-center text-brand-cyan mb-1">
             <Activity className="w-5 h-5 text-brand-cyan" />
           </div>
-          <p className="text-sm font-semibold text-white">
+          <p className="font-sans text-sm font-semibold text-white">
             No diagnostic data available
           </p>
-          <p className="text-xs text-neutral-400 max-w-md leading-relaxed">
+          <p className="font-sans text-xs text-neutral-400 max-w-md leading-relaxed">
             Telemetry integration is not configured.
           </p>
-          <p className="text-[11px] text-neutral-500 max-w-lg mt-1">
+          <p className="font-sans text-[11px] text-neutral-500 max-w-lg mt-1">
             {activeTab === 'runtime' &&
               'Live execution traces, worker telemetry daemons, and latency metrics will appear here once monitoring agents are connected to this node.'}
             {activeTab === 'mcp' &&
@@ -437,9 +444,9 @@ export function TelemetryConsole() {
         </div>
 
         {/* Terminal Bottom Diagnostic Readout */}
-        <div className="flex items-center justify-between text-[11px] text-neutral-500 pt-3 border-t border-neutral-800/80">
+        <div className="flex items-center justify-between font-mono text-[11px] text-neutral-500 pt-3 border-t border-neutral-800/80">
           <span>PORT: 6543 (Pooled)</span>
-          <span className="text-emerald-400 flex items-center gap-1.5">
+          <span className="text-emerald-400 flex items-center gap-1.5 font-mono">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
             Supabase Connection Ready
           </span>
@@ -448,11 +455,15 @@ export function TelemetryConsole() {
 
       {/* Action Toolbar */}
       <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <Link href="/technology">
-            <Button variant="secondary" size="sm" className="gap-1.5 text-xs font-mono">
-              <FileText className="w-3.5 h-3.5 text-text-muted" />
-              <span>System Specs</span>
+            <Button
+              variant="secondary"
+              size="sm"
+              className="h-9 px-3 gap-1.5 font-sans font-medium text-xs whitespace-nowrap shrink-0"
+            >
+              <FileText className="w-3.5 h-3.5 text-text-muted shrink-0" />
+              <span className="whitespace-nowrap">System Specs</span>
             </Button>
           </Link>
           <Button
@@ -460,10 +471,10 @@ export function TelemetryConsole() {
             size="sm"
             onClick={handleFlush}
             disabled={flushing}
-            className="gap-1.5 text-xs font-mono"
+            className="h-9 px-3 gap-1.5 font-sans font-medium text-xs whitespace-nowrap shrink-0"
           >
-            <RotateCw className={`w-3.5 h-3.5 text-text-muted ${flushing ? 'animate-spin' : ''}`} />
-            <span>{flushing ? 'Flushing...' : 'Flush Cache'}</span>
+            <RotateCw className={`w-3.5 h-3.5 text-text-muted shrink-0 ${flushing ? 'animate-spin' : ''}`} />
+            <span className="whitespace-nowrap">{flushing ? 'Flushing...' : 'Flush Cache'}</span>
           </Button>
         </div>
 
@@ -471,17 +482,17 @@ export function TelemetryConsole() {
           variant="secondary"
           size="sm"
           onClick={handleCopyHost}
-          className="gap-1.5 text-xs font-mono text-brand-accent dark:hover:text-white"
+          className="h-9 px-3 gap-1.5 font-sans font-medium text-xs whitespace-nowrap shrink-0 text-brand-accent dark:hover:text-white"
         >
           {copiedHost ? (
             <>
-              <Check className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Host Copied</span>
+              <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+              <span className="whitespace-nowrap">Host Copied</span>
             </>
           ) : (
             <>
-              <Copy className="w-3.5 h-3.5" />
-              <span>Copy DB Pooler Host</span>
+              <Copy className="w-3.5 h-3.5 shrink-0" />
+              <span className="whitespace-nowrap">Copy DB Pooler Host</span>
             </>
           )}
         </Button>
@@ -503,8 +514,8 @@ export function DashboardSidebar({ userEmail, displayName }: { userEmail: string
       {/* Console Node Lockup */}
       <div className="space-y-2 border-b dark:border-border-hairline border-[#E7E8ED] pb-4">
         <div className="flex items-center justify-between">
-          <span className="font-mono text-[10px] text-text-muted uppercase tracking-widest">
-            CONSOLE DIRECTORY
+          <span className="font-sans text-[11px] font-semibold text-text-muted uppercase tracking-wider">
+            Console Directory
           </span>
           <span className="inline-flex items-center gap-1 font-mono text-[10px] text-brand-cyan">
             <span className="w-1.5 h-1.5 rounded-full bg-brand-cyan animate-pulse" />
@@ -513,7 +524,7 @@ export function DashboardSidebar({ userEmail, displayName }: { userEmail: string
         </div>
         <div className="dark:bg-surface-card bg-[#F3F4F7] p-2.5 rounded-xs border dark:border-border-hairline border-[#E7E8ED] flex items-center justify-between">
           <span className="font-mono text-xs dark:text-text-primary text-[#17181C]">v1.0.0-prod</span>
-          <span className="font-mono text-[10px] text-emerald-400">ONLINE</span>
+          <span className="font-sans text-[11px] font-semibold text-emerald-400">ONLINE</span>
         </div>
       </div>
 
@@ -522,98 +533,98 @@ export function DashboardSidebar({ userEmail, displayName }: { userEmail: string
         <button
           type="button"
           onClick={() => scrollTo('overview')}
-          className="w-full flex items-center justify-between px-3 py-2 rounded-xs dark:hover:bg-surface-card hover:bg-[#F3F4F7] dark:text-text-primary text-[#17181C] transition-colors cursor-pointer text-left"
+          className="w-full flex items-center justify-between px-3 py-2 rounded-xs dark:hover:bg-surface-card hover:bg-[#F3F4F7] dark:text-text-primary text-[#17181C] font-medium transition-colors cursor-pointer text-left whitespace-nowrap"
         >
-          <div className="flex items-center gap-2.5">
-            <Activity className="w-4 h-4 text-brand-accent" />
-            <span>Console Overview</span>
+          <div className="flex items-center gap-2.5 shrink-0">
+            <Activity className="w-4 h-4 text-brand-accent shrink-0" />
+            <span className="whitespace-nowrap">Console Overview</span>
           </div>
-          <ChevronRight className="w-3.5 h-3.5 text-text-muted" />
+          <ChevronRight className="w-3.5 h-3.5 text-text-muted shrink-0" />
         </button>
 
         <button
           type="button"
           onClick={() => scrollTo('infrastructure')}
-          className="w-full flex items-center justify-between px-3 py-2 rounded-xs dark:hover:bg-surface-card hover:bg-[#F3F4F7] dark:text-text-secondary text-[#52525B] hover:text-[#17181C] dark:hover:text-white transition-colors cursor-pointer text-left"
+          className="w-full flex items-center justify-between px-3 py-2 rounded-xs dark:hover:bg-surface-card hover:bg-[#F3F4F7] dark:text-text-secondary text-[#52525B] hover:text-[#17181C] dark:hover:text-white font-medium transition-colors cursor-pointer text-left whitespace-nowrap"
         >
-          <div className="flex items-center gap-2.5">
-            <Database className="w-4 h-4 text-brand-cyan" />
-            <span>Operational Nodes</span>
+          <div className="flex items-center gap-2.5 shrink-0">
+            <Database className="w-4 h-4 text-brand-cyan shrink-0" />
+            <span className="whitespace-nowrap">Operational Nodes</span>
           </div>
-          <ChevronRight className="w-3.5 h-3.5 text-text-muted" />
+          <ChevronRight className="w-3.5 h-3.5 text-text-muted shrink-0" />
         </button>
 
         <button
           type="button"
           onClick={() => scrollTo('dossier')}
-          className="w-full flex items-center justify-between px-3 py-2 rounded-xs dark:hover:bg-surface-card hover:bg-[#F3F4F7] dark:text-text-secondary text-[#52525B] hover:text-[#17181C] dark:hover:text-white transition-colors cursor-pointer text-left"
+          className="w-full flex items-center justify-between px-3 py-2 rounded-xs dark:hover:bg-surface-card hover:bg-[#F3F4F7] dark:text-text-secondary text-[#52525B] hover:text-[#17181C] dark:hover:text-white font-medium transition-colors cursor-pointer text-left whitespace-nowrap"
         >
-          <div className="flex items-center gap-2.5">
-            <UserIcon className="w-4 h-4 text-brand-accent" />
-            <span>User Dossier</span>
+          <div className="flex items-center gap-2.5 shrink-0">
+            <UserIcon className="w-4 h-4 text-brand-accent shrink-0" />
+            <span className="whitespace-nowrap">User Dossier</span>
           </div>
-          <ChevronRight className="w-3.5 h-3.5 text-text-muted" />
+          <ChevronRight className="w-3.5 h-3.5 text-text-muted shrink-0" />
         </button>
 
         <button
           type="button"
           onClick={() => scrollTo('matrix')}
-          className="w-full flex items-center justify-between px-3 py-2 rounded-xs dark:hover:bg-surface-card hover:bg-[#F3F4F7] dark:text-text-secondary text-[#52525B] hover:text-[#17181C] dark:hover:text-white transition-colors cursor-pointer text-left"
+          className="w-full flex items-center justify-between px-3 py-2 rounded-xs dark:hover:bg-surface-card hover:bg-[#F3F4F7] dark:text-text-secondary text-[#52525B] hover:text-[#17181C] dark:hover:text-white font-medium transition-colors cursor-pointer text-left whitespace-nowrap"
         >
-          <div className="flex items-center gap-2.5">
-            <Layers className="w-4 h-4 text-emerald-400" />
-            <span>Architecture Matrix</span>
+          <div className="flex items-center gap-2.5 shrink-0">
+            <Layers className="w-4 h-4 text-emerald-400 shrink-0" />
+            <span className="whitespace-nowrap">Architecture Matrix</span>
           </div>
-          <ChevronRight className="w-3.5 h-3.5 text-text-muted" />
+          <ChevronRight className="w-3.5 h-3.5 text-text-muted shrink-0" />
         </button>
 
         <button
           type="button"
           onClick={() => scrollTo('telemetry')}
-          className="w-full flex items-center justify-between px-3 py-2 rounded-xs dark:hover:bg-surface-card hover:bg-[#F3F4F7] dark:text-text-secondary text-[#52525B] hover:text-[#17181C] dark:hover:text-white transition-colors cursor-pointer text-left"
+          className="w-full flex items-center justify-between px-3 py-2 rounded-xs dark:hover:bg-surface-card hover:bg-[#F3F4F7] dark:text-text-secondary text-[#52525B] hover:text-[#17181C] dark:hover:text-white font-medium transition-colors cursor-pointer text-left whitespace-nowrap"
         >
-          <div className="flex items-center gap-2.5">
-            <Terminal className="w-4 h-4 text-brand-cyan" />
-            <span>Telemetry Console</span>
+          <div className="flex items-center gap-2.5 shrink-0">
+            <Terminal className="w-4 h-4 text-brand-cyan shrink-0" />
+            <span className="whitespace-nowrap">Telemetry Console</span>
           </div>
-          <ChevronRight className="w-3.5 h-3.5 text-text-muted" />
+          <ChevronRight className="w-3.5 h-3.5 text-text-muted shrink-0" />
         </button>
 
         <div className="pt-2 border-t dark:border-border-hairline border-[#E7E8ED] my-2 space-y-1">
           <Link
             href="/technology"
-            className="flex items-center justify-between px-3 py-2 rounded-xs dark:hover:bg-surface-card hover:bg-[#F3F4F7] dark:text-text-secondary text-[#52525B] hover:text-[#17181C] dark:hover:text-white transition-colors"
+            className="flex items-center justify-between px-3 py-2 rounded-xs dark:hover:bg-surface-card hover:bg-[#F3F4F7] dark:text-text-secondary text-[#52525B] hover:text-[#17181C] dark:hover:text-white font-medium transition-colors whitespace-nowrap"
           >
-            <div className="flex items-center gap-2.5">
-              <Shield className="w-4 h-4 text-text-muted" />
-              <span>System Specs</span>
+            <div className="flex items-center gap-2.5 shrink-0">
+              <Shield className="w-4 h-4 text-text-muted shrink-0" />
+              <span className="whitespace-nowrap">System Specs</span>
             </div>
-            <ExternalLink className="w-3 h-3 text-text-muted" />
+            <ExternalLink className="w-3 h-3 text-text-muted shrink-0" />
           </Link>
 
           <Link
             href="/company"
-            className="flex items-center justify-between px-3 py-2 rounded-xs dark:hover:bg-surface-card hover:bg-[#F3F4F7] dark:text-text-secondary text-[#52525B] hover:text-[#17181C] dark:hover:text-white transition-colors"
+            className="flex items-center justify-between px-3 py-2 rounded-xs dark:hover:bg-surface-card hover:bg-[#F3F4F7] dark:text-text-secondary text-[#52525B] hover:text-[#17181C] dark:hover:text-white font-medium transition-colors whitespace-nowrap"
           >
-            <div className="flex items-center gap-2.5">
-              <FileText className="w-4 h-4 text-text-muted" />
-              <span>Company Thesis</span>
+            <div className="flex items-center gap-2.5 shrink-0">
+              <FileText className="w-4 h-4 text-text-muted shrink-0" />
+              <span className="whitespace-nowrap">Company Thesis</span>
             </div>
-            <ExternalLink className="w-3 h-3 text-text-muted" />
+            <ExternalLink className="w-3 h-3 text-text-muted shrink-0" />
           </Link>
         </div>
       </nav>
 
       {/* Workspace Plan Strip */}
-      <div className="p-3 rounded-xs dark:bg-surface-card bg-[#F3F4F7] border dark:border-border-hairline border-[#E7E8ED] space-y-1 font-mono text-xs">
+      <div className="p-3 rounded-xs dark:bg-surface-card bg-[#F3F4F7] border dark:border-border-hairline border-[#E7E8ED] space-y-1 font-sans text-xs">
         <div className="flex items-center justify-between">
-          <span className="text-[10px] text-text-muted uppercase">Workspace</span>
-          <span className="text-emerald-400 text-[10px]">ACTIVE</span>
+          <span className="text-[11px] font-medium text-text-muted uppercase">Workspace</span>
+          <span className="text-emerald-400 text-[11px] font-semibold">ACTIVE</span>
         </div>
         <p className="font-sans text-xs font-semibold dark:text-text-pure text-[#17181C] truncate">
           {displayName}
         </p>
-        <p className="text-[10px] text-text-muted truncate">{userEmail}</p>
+        <p className="text-[11px] text-text-muted truncate">{userEmail}</p>
       </div>
 
       {/* Quick Sign Out */}
@@ -633,39 +644,39 @@ export function DashboardMobileNav() {
   };
 
   return (
-    <div className="lg:hidden flex items-center gap-2 overflow-x-auto pb-1 font-mono text-xs scrollbar-none">
+    <div className="lg:hidden flex items-center gap-2 overflow-x-auto pb-1 font-sans text-xs scrollbar-none">
       <button
         type="button"
         onClick={() => scrollTo('overview')}
-        className="shrink-0 px-3 py-1.5 rounded-xs dark:bg-surface-card bg-white border dark:border-border-hairline border-[#E7E8ED] dark:text-text-primary text-[#17181C]"
+        className="shrink-0 px-3 py-1.5 rounded-xs font-medium dark:bg-surface-card bg-white border dark:border-border-hairline border-[#E7E8ED] dark:text-text-primary text-[#17181C] whitespace-nowrap"
       >
         Overview
       </button>
       <button
         type="button"
         onClick={() => scrollTo('infrastructure')}
-        className="shrink-0 px-3 py-1.5 rounded-xs dark:bg-surface-card bg-white border dark:border-border-hairline border-[#E7E8ED] dark:text-text-secondary text-[#52525B]"
+        className="shrink-0 px-3 py-1.5 rounded-xs font-medium dark:bg-surface-card bg-white border dark:border-border-hairline border-[#E7E8ED] dark:text-text-secondary text-[#52525B] whitespace-nowrap"
       >
         Nodes
       </button>
       <button
         type="button"
         onClick={() => scrollTo('dossier')}
-        className="shrink-0 px-3 py-1.5 rounded-xs dark:bg-surface-card bg-white border dark:border-border-hairline border-[#E7E8ED] dark:text-text-secondary text-[#52525B]"
+        className="shrink-0 px-3 py-1.5 rounded-xs font-medium dark:bg-surface-card bg-white border dark:border-border-hairline border-[#E7E8ED] dark:text-text-secondary text-[#52525B] whitespace-nowrap"
       >
         Dossier
       </button>
       <button
         type="button"
         onClick={() => scrollTo('matrix')}
-        className="shrink-0 px-3 py-1.5 rounded-xs dark:bg-surface-card bg-white border dark:border-border-hairline border-[#E7E8ED] dark:text-text-secondary text-[#52525B]"
+        className="shrink-0 px-3 py-1.5 rounded-xs font-medium dark:bg-surface-card bg-white border dark:border-border-hairline border-[#E7E8ED] dark:text-text-secondary text-[#52525B] whitespace-nowrap"
       >
         Matrix
       </button>
       <button
         type="button"
         onClick={() => scrollTo('telemetry')}
-        className="shrink-0 px-3 py-1.5 rounded-xs dark:bg-surface-card bg-white border dark:border-border-hairline border-[#E7E8ED] dark:text-text-secondary text-[#52525B]"
+        className="shrink-0 px-3 py-1.5 rounded-xs font-medium dark:bg-surface-card bg-white border dark:border-border-hairline border-[#E7E8ED] dark:text-text-secondary text-[#52525B] whitespace-nowrap"
       >
         Telemetry
       </button>

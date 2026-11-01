@@ -3,10 +3,40 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, ArrowUpRight, User as UserIcon } from 'lucide-react';
+import { Menu, X, ArrowUpRight } from 'lucide-react';
 import { PRIMARY_NAV } from '@/data/navigation';
 import { Button, Badge, Logo } from '@/components/ui';
 import { useSession } from '@/lib/auth/client';
+
+function getUserDisplayName(user?: { name?: string | null; email?: string | null }): string {
+  if (!user) return 'Account';
+  if (user.name && user.name.trim().length > 0) return user.name.trim();
+  if (user.email && user.email.includes('@')) {
+    const localPart = user.email.split('@')[0];
+    return (
+      localPart
+        .split(/[._-]/)
+        .filter(Boolean)
+        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+        .join(' ') || 'Account'
+    );
+  }
+  return 'Account';
+}
+
+function getUserInitials(displayName: string): string {
+  const parts = displayName.trim().split(/\s+/).filter(Boolean);
+  if (parts.length >= 2) {
+    return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
+  }
+  if (parts.length === 1 && parts[0].length >= 2) {
+    return parts[0].slice(0, 2).toUpperCase();
+  }
+  if (parts.length === 1 && parts[0].length === 1) {
+    return parts[0].toUpperCase();
+  }
+  return 'U';
+}
 
 export function Navbar() {
   const { data: session } = useSession();
@@ -73,6 +103,8 @@ export function Navbar() {
   };
 
   const isDashboardActive = pathname === '/dashboard';
+  const displayName = getUserDisplayName(session?.user);
+  const initials = getUserInitials(displayName);
 
   return (
     <>
@@ -127,17 +159,22 @@ export function Navbar() {
             </Badge>
 
             {session?.user ? (
-              <Link href="/dashboard">
-                <Button
-                  variant={isDashboardActive ? 'accent' : 'secondary'}
-                  size="sm"
-                  className={`gap-1.5 font-mono text-xs ${
-                    isDashboardActive ? 'shadow-accent-glow ring-1 ring-brand-accent/50' : ''
-                  }`}
-                >
-                  <UserIcon className="w-3.5 h-3.5 text-brand-cyan" />
-                  <span>Dashboard</span>
-                </Button>
+              <Link
+                href="/dashboard"
+                className={`inline-flex items-center gap-2 h-9 px-2.5 rounded-xs font-sans text-xs sm:text-[13px] font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-accent whitespace-nowrap shrink-0 ${
+                  isDashboardActive
+                    ? 'dark:bg-surface-elevated bg-white border border-brand-accent/50 dark:text-white text-[#17181C] shadow-accent-glow'
+                    : 'dark:bg-surface-card bg-white border dark:border-border-hairline border-[#E7E8ED] dark:text-text-primary text-[#17181C] hover:dark:border-border-strong hover:border-[#D8DAE2] hover:dark:bg-surface-elevated hover:bg-[#F3F4F7]'
+                }`}
+                title={`Signed in as ${displayName}`}
+                aria-label={`Enterprise Dashboard for ${displayName}`}
+              >
+                <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-xs bg-brand-accent text-white font-sans text-[10px] sm:text-[11px] font-bold flex items-center justify-center shrink-0 shadow-xs">
+                  {initials}
+                </div>
+                <span className="truncate max-w-[130px] lg:max-w-[170px]">
+                  {displayName}
+                </span>
               </Link>
             ) : (
               <Link href="/auth/sign-in">
@@ -154,18 +191,24 @@ export function Navbar() {
             </Link>
           </div>
 
-          {/* Mobile Header Actions (Sign In + Menu Toggle) */}
-          <div className="flex md:hidden items-center gap-2.5 shrink-0 z-10">
+          {/* Mobile Header Actions (User Identity + Menu Toggle) */}
+          <div className="flex md:hidden items-center gap-2 shrink-0 z-10">
             {session?.user ? (
-              <Link href="/dashboard">
-                <Button
-                  variant={isDashboardActive ? 'accent' : 'secondary'}
-                  size="sm"
-                  className="h-8 px-2.5 text-xs font-mono gap-1"
-                >
-                  <UserIcon className="w-3 h-3 text-brand-cyan" />
-                  <span>OS</span>
-                </Button>
+              <Link
+                href="/dashboard"
+                className={`inline-flex items-center gap-1.5 h-8 px-2 rounded-xs font-sans text-xs font-medium transition-all duration-150 shrink-0 whitespace-nowrap ${
+                  isDashboardActive
+                    ? 'dark:bg-surface-elevated bg-white border border-brand-accent/50 shadow-accent-glow dark:text-white text-[#17181C]'
+                    : 'dark:bg-surface-card bg-white border dark:border-border-hairline border-[#E7E8ED] dark:text-text-primary text-[#17181C]'
+                }`}
+                aria-label={`Dashboard for ${displayName}`}
+              >
+                <div className="w-5 h-5 rounded-xs bg-brand-accent text-white font-sans text-[10px] font-bold flex items-center justify-center shrink-0">
+                  {initials}
+                </div>
+                <span className="hidden min-[380px]:inline-block truncate max-w-[80px]">
+                  {displayName.split(' ')[0]}
+                </span>
               </Link>
             ) : (
               <Link href="/auth/sign-in">
@@ -233,14 +276,31 @@ export function Navbar() {
 
               {session?.user ? (
                 <Link href="/dashboard" onClick={() => setMobileMenuOpen(false)}>
-                  <Button
-                    variant={isDashboardActive ? 'accent' : 'secondary'}
-                    size="lg"
-                    className="w-full justify-center gap-2 font-mono text-xs h-11"
+                  <div
+                    className={`w-full flex items-center justify-between p-3 rounded-xs border transition-colors ${
+                      isDashboardActive
+                        ? 'dark:bg-surface-card bg-white border-brand-accent shadow-accent-glow'
+                        : 'dark:bg-surface-card bg-white dark:border-border-hairline border-[#E7E8ED] hover:border-brand-accent/40'
+                    }`}
                   >
-                    <UserIcon className="w-4 h-4 text-brand-cyan" />
-                    <span>Enter Enterprise Dashboard</span>
-                  </Button>
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className="w-8 h-8 rounded-xs bg-brand-accent text-white font-sans text-xs font-bold flex items-center justify-center shrink-0 shadow-xs">
+                        {initials}
+                      </div>
+                      <div className="flex flex-col text-left min-w-0">
+                        <span className="font-sans text-sm font-semibold dark:text-text-pure text-[#17181C] truncate">
+                          {displayName}
+                        </span>
+                        <span className="font-sans text-xs text-text-muted truncate">
+                          {session.user.email}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="inline-flex items-center gap-1 font-sans text-xs text-brand-accent font-medium shrink-0 ml-2">
+                      <span>Console</span>
+                      <ArrowUpRight className="w-3.5 h-3.5" />
+                    </div>
+                  </div>
                 </Link>
               ) : (
                 <div className="grid grid-cols-2 gap-2">
