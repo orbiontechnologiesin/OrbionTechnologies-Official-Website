@@ -30,6 +30,7 @@ import {
   Building2,
   Calendar,
   CheckCircle2,
+  Settings,
 } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
@@ -145,9 +146,9 @@ export default async function DashboardPage() {
                     <Button
                       variant="secondary"
                       size="sm"
-                      className="h-9 px-3 gap-1.5 font-sans font-medium text-xs whitespace-nowrap shrink-0"
+                      className="h-9 px-3 gap-2 font-sans font-medium text-xs whitespace-nowrap shrink-0"
                     >
-                      <Cpu className="w-3.5 h-3.5 text-brand-cyan shrink-0" />
+                      <Settings className="w-3.5 h-3.5 text-brand-cyan shrink-0" />
                       <span className="whitespace-nowrap">System Specs</span>
                     </Button>
                   </Link>
@@ -472,9 +473,9 @@ export default async function DashboardPage() {
                   <div className="flex items-center justify-between pt-1">
                     <Link
                       href="/technology#agents"
-                      className="font-sans text-xs font-medium text-brand-accent hover:text-brand-accent-hover flex items-center gap-1 transition-colors"
+                      className="font-sans text-xs font-medium text-brand-accent hover:text-brand-accent-hover inline-flex flex-row items-center gap-1.5 transition-colors whitespace-nowrap"
                     >
-                      <span>Inspect Agent Specifications</span>
+                      <span className="whitespace-nowrap">Inspect Agent Specifications</span>
                       <ArrowRight className="w-3.5 h-3.5 shrink-0" />
                     </Link>
                     <span className="font-sans text-[11px] text-text-muted">RFC-01</span>
@@ -519,9 +520,9 @@ export default async function DashboardPage() {
                   <div className="pt-1">
                     <Link
                       href="/company"
-                      className="font-sans text-xs font-medium text-brand-accent hover:text-brand-accent-hover flex items-center gap-1 transition-colors"
+                      className="font-sans text-xs font-medium text-brand-accent hover:text-brand-accent-hover inline-flex flex-row items-center gap-1.5 transition-colors whitespace-nowrap"
                     >
-                      <span>Read Company Thesis &amp; Roadmap</span>
+                      <span className="whitespace-nowrap">Read Company Thesis &amp; Roadmap</span>
                       <ArrowRight className="w-3.5 h-3.5 shrink-0" />
                     </Link>
                   </div>

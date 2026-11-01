@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { signOut } from '@/lib/auth/client';
 import { Button } from '@/components/ui';
+import { cn } from '@/lib/utils';
 import {
   LogOut,
   Loader2,
@@ -25,10 +26,11 @@ import {
   RotateCw,
   ExternalLink,
   ChevronRight,
+  Settings,
   User as UserIcon,
 } from 'lucide-react';
 
-export function ThemeShiftButton() {
+export function ThemeShiftButton({ className }: { className?: string }) {
   const [isDark, setIsDark] = useState(true);
   const [mounted, setMounted] = useState(false);
 
@@ -69,10 +71,13 @@ export function ThemeShiftButton() {
       <Button
         variant="secondary"
         size="sm"
-        className="h-9 px-3 gap-2 font-sans font-medium text-xs whitespace-nowrap shrink-0 dark:bg-surface-card bg-white dark:border-border-hairline border-[#E7E8ED] dark:text-text-primary text-[#17181C]"
+        className={cn(
+          'h-9 px-3 gap-2 font-sans font-medium text-xs whitespace-nowrap shrink-0 dark:bg-surface-card bg-white dark:border-border-hairline border-[#E7E8ED] dark:text-text-primary text-[#17181C]',
+          className
+        )}
       >
         <Moon className="w-3.5 h-3.5 text-brand-accent shrink-0" />
-        <span className="whitespace-nowrap">Theme Shift</span>
+        <span className="whitespace-nowrap">Light Mode</span>
       </Button>
     );
   }
@@ -82,7 +87,10 @@ export function ThemeShiftButton() {
       variant="secondary"
       size="sm"
       onClick={toggleTheme}
-      className="h-9 px-3 gap-2 font-sans font-medium text-xs whitespace-nowrap shrink-0 dark:bg-surface-card bg-white dark:border-border-hairline border-[#E7E8ED] dark:text-text-primary text-[#17181C] hover:border-brand-accent/40"
+      className={cn(
+        'h-9 px-3 gap-2 font-sans font-medium text-xs whitespace-nowrap shrink-0 dark:bg-surface-card bg-white dark:border-border-hairline border-[#E7E8ED] dark:text-text-primary text-[#17181C] hover:border-brand-accent/40',
+        className
+      )}
       title={isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
       aria-label="Toggle Theme"
     >
@@ -101,7 +109,7 @@ export function ThemeShiftButton() {
   );
 }
 
-export function LogoutButton() {
+export function LogoutButton({ className }: { className?: string }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
@@ -125,7 +133,10 @@ export function LogoutButton() {
       size="sm"
       disabled={loading}
       onClick={handleSignOut}
-      className="h-9 px-3 gap-2 font-sans font-medium text-xs whitespace-nowrap shrink-0 text-red-400 hover:text-red-300 dark:hover:bg-red-950/20 hover:bg-red-50 hover:border-red-500/30"
+      className={cn(
+        'h-9 px-3 gap-2 font-sans font-medium text-xs whitespace-nowrap shrink-0 text-red-400 hover:text-red-300 dark:hover:bg-red-950/20 hover:bg-red-50 hover:border-red-500/30',
+        className
+      )}
     >
       {loading ? (
         <Loader2 className="w-3.5 h-3.5 animate-spin shrink-0" />
@@ -154,7 +165,7 @@ export function CopyButton({ text, label = 'Copy' }: { text: string; label?: str
     <button
       type="button"
       onClick={handleCopy}
-      className="inline-flex items-center justify-center p-1 rounded-xs text-text-muted hover:text-text-pure dark:hover:text-white transition-colors cursor-pointer shrink-0 whitespace-nowrap"
+      className="inline-flex flex-row items-center justify-center p-1 rounded-xs text-text-muted hover:text-text-pure dark:hover:text-white transition-colors cursor-pointer shrink-0 whitespace-nowrap"
       title={copied ? 'Copied to clipboard' : label}
       aria-label={copied ? 'Copied' : label}
     >
@@ -237,7 +248,7 @@ export function ProfileEditor({
           setError('');
           setSuccess('');
         }}
-        className="w-full justify-center gap-2 font-sans font-medium text-xs sm:text-[13px] whitespace-nowrap shrink-0 h-10 mt-3"
+        className="w-full justify-center gap-2 font-sans font-medium text-xs sm:text-[13px] whitespace-nowrap shrink-0 h-10 mt-3 px-4"
       >
         <Edit3 className="w-3.5 h-3.5 shrink-0" />
         <span className="whitespace-nowrap">Update Profile Information</span>
@@ -254,8 +265,9 @@ export function ProfileEditor({
                 </h3>
               </div>
               <button
+                type="button"
                 onClick={() => setIsOpen(false)}
-                className="text-text-muted hover:text-text-pure dark:hover:text-white transition-colors"
+                className="inline-flex items-center justify-center p-1 rounded-xs text-text-muted hover:text-text-pure dark:hover:text-white transition-colors cursor-pointer shrink-0"
                 aria-label="Close"
               >
                 <X className="w-4 h-4" />
@@ -316,14 +328,14 @@ export function ProfileEditor({
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-3 border-t dark:border-border-hairline border-[#E7E8ED]">
+              <div className="flex flex-row items-center justify-end gap-3 pt-3 border-t dark:border-border-hairline border-[#E7E8ED]">
                 <Button
                   type="button"
                   variant="secondary"
                   size="sm"
                   onClick={() => setIsOpen(false)}
                   disabled={loading}
-                  className="font-sans font-medium text-xs whitespace-nowrap shrink-0"
+                  className="h-9 px-4 gap-2 font-sans font-medium text-xs whitespace-nowrap shrink-0"
                 >
                   Cancel
                 </Button>
@@ -332,9 +344,19 @@ export function ProfileEditor({
                   variant="primary"
                   size="sm"
                   disabled={loading}
-                  className="font-sans font-medium text-xs whitespace-nowrap shrink-0"
+                  className="h-9 px-4 gap-2 font-sans font-medium text-xs whitespace-nowrap shrink-0"
                 >
-                  {loading ? 'Saving...' : 'Save Profile'}
+                  {loading ? (
+                    <>
+                      <Loader2 className="w-3.5 h-3.5 animate-spin shrink-0" />
+                      <span className="whitespace-nowrap">Saving...</span>
+                    </>
+                  ) : (
+                    <>
+                      <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
+                      <span className="whitespace-nowrap">Save Profile</span>
+                    </>
+                  )}
                 </Button>
               </div>
             </form>
@@ -377,7 +399,7 @@ export function TelemetryConsole() {
         </div>
 
         {/* Tab Controls */}
-        <div className="flex items-center dark:bg-surface-subtle bg-[#F3F4F7] p-1 rounded-xs gap-1 font-sans text-xs">
+        <div className="flex flex-row items-center dark:bg-surface-subtle bg-[#F3F4F7] p-1 rounded-xs gap-1 font-sans text-xs">
           <button
             type="button"
             onClick={() => setActiveTab('runtime')}
@@ -460,9 +482,9 @@ export function TelemetryConsole() {
             <Button
               variant="secondary"
               size="sm"
-              className="h-9 px-3 gap-1.5 font-sans font-medium text-xs whitespace-nowrap shrink-0"
+              className="h-9 px-3 gap-2 font-sans font-medium text-xs whitespace-nowrap shrink-0"
             >
-              <FileText className="w-3.5 h-3.5 text-text-muted shrink-0" />
+              <Settings className="w-3.5 h-3.5 text-text-muted shrink-0" />
               <span className="whitespace-nowrap">System Specs</span>
             </Button>
           </Link>
@@ -471,7 +493,7 @@ export function TelemetryConsole() {
             size="sm"
             onClick={handleFlush}
             disabled={flushing}
-            className="h-9 px-3 gap-1.5 font-sans font-medium text-xs whitespace-nowrap shrink-0"
+            className="h-9 px-3 gap-2 font-sans font-medium text-xs whitespace-nowrap shrink-0"
           >
             <RotateCw className={`w-3.5 h-3.5 text-text-muted shrink-0 ${flushing ? 'animate-spin' : ''}`} />
             <span className="whitespace-nowrap">{flushing ? 'Flushing...' : 'Flush Cache'}</span>
@@ -482,7 +504,7 @@ export function TelemetryConsole() {
           variant="secondary"
           size="sm"
           onClick={handleCopyHost}
-          className="h-9 px-3 gap-1.5 font-sans font-medium text-xs whitespace-nowrap shrink-0 text-brand-accent dark:hover:text-white"
+          className="h-9 px-3 gap-2 font-sans font-medium text-xs whitespace-nowrap shrink-0 text-brand-accent dark:hover:text-white"
         >
           {copiedHost ? (
             <>
@@ -533,9 +555,9 @@ export function DashboardSidebar({ userEmail, displayName }: { userEmail: string
         <button
           type="button"
           onClick={() => scrollTo('overview')}
-          className="w-full flex items-center justify-between px-3 py-2 rounded-xs dark:hover:bg-surface-card hover:bg-[#F3F4F7] dark:text-text-primary text-[#17181C] font-medium transition-colors cursor-pointer text-left whitespace-nowrap"
+          className="w-full flex flex-row items-center justify-between px-3 py-2 rounded-xs dark:hover:bg-surface-card hover:bg-[#F3F4F7] dark:text-text-primary text-[#17181C] font-medium transition-colors cursor-pointer text-left whitespace-nowrap"
         >
-          <div className="flex items-center gap-2.5 shrink-0">
+          <div className="inline-flex flex-row items-center gap-2 shrink-0">
             <Activity className="w-4 h-4 text-brand-accent shrink-0" />
             <span className="whitespace-nowrap">Console Overview</span>
           </div>
@@ -545,9 +567,9 @@ export function DashboardSidebar({ userEmail, displayName }: { userEmail: string
         <button
           type="button"
           onClick={() => scrollTo('infrastructure')}
-          className="w-full flex items-center justify-between px-3 py-2 rounded-xs dark:hover:bg-surface-card hover:bg-[#F3F4F7] dark:text-text-secondary text-[#52525B] hover:text-[#17181C] dark:hover:text-white font-medium transition-colors cursor-pointer text-left whitespace-nowrap"
+          className="w-full flex flex-row items-center justify-between px-3 py-2 rounded-xs dark:hover:bg-surface-card hover:bg-[#F3F4F7] dark:text-text-secondary text-[#52525B] hover:text-[#17181C] dark:hover:text-white font-medium transition-colors cursor-pointer text-left whitespace-nowrap"
         >
-          <div className="flex items-center gap-2.5 shrink-0">
+          <div className="inline-flex flex-row items-center gap-2 shrink-0">
             <Database className="w-4 h-4 text-brand-cyan shrink-0" />
             <span className="whitespace-nowrap">Operational Nodes</span>
           </div>
@@ -557,9 +579,9 @@ export function DashboardSidebar({ userEmail, displayName }: { userEmail: string
         <button
           type="button"
           onClick={() => scrollTo('dossier')}
-          className="w-full flex items-center justify-between px-3 py-2 rounded-xs dark:hover:bg-surface-card hover:bg-[#F3F4F7] dark:text-text-secondary text-[#52525B] hover:text-[#17181C] dark:hover:text-white font-medium transition-colors cursor-pointer text-left whitespace-nowrap"
+          className="w-full flex flex-row items-center justify-between px-3 py-2 rounded-xs dark:hover:bg-surface-card hover:bg-[#F3F4F7] dark:text-text-secondary text-[#52525B] hover:text-[#17181C] dark:hover:text-white font-medium transition-colors cursor-pointer text-left whitespace-nowrap"
         >
-          <div className="flex items-center gap-2.5 shrink-0">
+          <div className="inline-flex flex-row items-center gap-2 shrink-0">
             <UserIcon className="w-4 h-4 text-brand-accent shrink-0" />
             <span className="whitespace-nowrap">User Dossier</span>
           </div>
@@ -569,9 +591,9 @@ export function DashboardSidebar({ userEmail, displayName }: { userEmail: string
         <button
           type="button"
           onClick={() => scrollTo('matrix')}
-          className="w-full flex items-center justify-between px-3 py-2 rounded-xs dark:hover:bg-surface-card hover:bg-[#F3F4F7] dark:text-text-secondary text-[#52525B] hover:text-[#17181C] dark:hover:text-white font-medium transition-colors cursor-pointer text-left whitespace-nowrap"
+          className="w-full flex flex-row items-center justify-between px-3 py-2 rounded-xs dark:hover:bg-surface-card hover:bg-[#F3F4F7] dark:text-text-secondary text-[#52525B] hover:text-[#17181C] dark:hover:text-white font-medium transition-colors cursor-pointer text-left whitespace-nowrap"
         >
-          <div className="flex items-center gap-2.5 shrink-0">
+          <div className="inline-flex flex-row items-center gap-2 shrink-0">
             <Layers className="w-4 h-4 text-emerald-400 shrink-0" />
             <span className="whitespace-nowrap">Architecture Matrix</span>
           </div>
@@ -581,9 +603,9 @@ export function DashboardSidebar({ userEmail, displayName }: { userEmail: string
         <button
           type="button"
           onClick={() => scrollTo('telemetry')}
-          className="w-full flex items-center justify-between px-3 py-2 rounded-xs dark:hover:bg-surface-card hover:bg-[#F3F4F7] dark:text-text-secondary text-[#52525B] hover:text-[#17181C] dark:hover:text-white font-medium transition-colors cursor-pointer text-left whitespace-nowrap"
+          className="w-full flex flex-row items-center justify-between px-3 py-2 rounded-xs dark:hover:bg-surface-card hover:bg-[#F3F4F7] dark:text-text-secondary text-[#52525B] hover:text-[#17181C] dark:hover:text-white font-medium transition-colors cursor-pointer text-left whitespace-nowrap"
         >
-          <div className="flex items-center gap-2.5 shrink-0">
+          <div className="inline-flex flex-row items-center gap-2 shrink-0">
             <Terminal className="w-4 h-4 text-brand-cyan shrink-0" />
             <span className="whitespace-nowrap">Telemetry Console</span>
           </div>
@@ -593,9 +615,9 @@ export function DashboardSidebar({ userEmail, displayName }: { userEmail: string
         <div className="pt-2 border-t dark:border-border-hairline border-[#E7E8ED] my-2 space-y-1">
           <Link
             href="/technology"
-            className="flex items-center justify-between px-3 py-2 rounded-xs dark:hover:bg-surface-card hover:bg-[#F3F4F7] dark:text-text-secondary text-[#52525B] hover:text-[#17181C] dark:hover:text-white font-medium transition-colors whitespace-nowrap"
+            className="flex flex-row items-center justify-between px-3 py-2 rounded-xs dark:hover:bg-surface-card hover:bg-[#F3F4F7] dark:text-text-secondary text-[#52525B] hover:text-[#17181C] dark:hover:text-white font-medium transition-colors whitespace-nowrap"
           >
-            <div className="flex items-center gap-2.5 shrink-0">
+            <div className="inline-flex flex-row items-center gap-2 shrink-0">
               <Shield className="w-4 h-4 text-text-muted shrink-0" />
               <span className="whitespace-nowrap">System Specs</span>
             </div>
@@ -604,9 +626,9 @@ export function DashboardSidebar({ userEmail, displayName }: { userEmail: string
 
           <Link
             href="/company"
-            className="flex items-center justify-between px-3 py-2 rounded-xs dark:hover:bg-surface-card hover:bg-[#F3F4F7] dark:text-text-secondary text-[#52525B] hover:text-[#17181C] dark:hover:text-white font-medium transition-colors whitespace-nowrap"
+            className="flex flex-row items-center justify-between px-3 py-2 rounded-xs dark:hover:bg-surface-card hover:bg-[#F3F4F7] dark:text-text-secondary text-[#52525B] hover:text-[#17181C] dark:hover:text-white font-medium transition-colors whitespace-nowrap"
           >
-            <div className="flex items-center gap-2.5 shrink-0">
+            <div className="inline-flex flex-row items-center gap-2 shrink-0">
               <FileText className="w-4 h-4 text-text-muted shrink-0" />
               <span className="whitespace-nowrap">Company Thesis</span>
             </div>
@@ -629,7 +651,7 @@ export function DashboardSidebar({ userEmail, displayName }: { userEmail: string
 
       {/* Quick Sign Out */}
       <div className="pt-1">
-        <LogoutButton />
+        <LogoutButton className="w-full justify-center" />
       </div>
     </div>
   );
@@ -644,39 +666,39 @@ export function DashboardMobileNav() {
   };
 
   return (
-    <div className="lg:hidden flex items-center gap-2 overflow-x-auto pb-1 font-sans text-xs scrollbar-none">
+    <div className="lg:hidden flex flex-row items-center gap-2 overflow-x-auto pb-1 font-sans text-xs scrollbar-none">
       <button
         type="button"
         onClick={() => scrollTo('overview')}
-        className="shrink-0 px-3 py-1.5 rounded-xs font-medium dark:bg-surface-card bg-white border dark:border-border-hairline border-[#E7E8ED] dark:text-text-primary text-[#17181C] whitespace-nowrap"
+        className="shrink-0 inline-flex flex-row items-center justify-center px-3 py-1.5 rounded-xs font-medium dark:bg-surface-card bg-white border dark:border-border-hairline border-[#E7E8ED] dark:text-text-primary text-[#17181C] whitespace-nowrap"
       >
         Overview
       </button>
       <button
         type="button"
         onClick={() => scrollTo('infrastructure')}
-        className="shrink-0 px-3 py-1.5 rounded-xs font-medium dark:bg-surface-card bg-white border dark:border-border-hairline border-[#E7E8ED] dark:text-text-secondary text-[#52525B] whitespace-nowrap"
+        className="shrink-0 inline-flex flex-row items-center justify-center px-3 py-1.5 rounded-xs font-medium dark:bg-surface-card bg-white border dark:border-border-hairline border-[#E7E8ED] dark:text-text-secondary text-[#52525B] whitespace-nowrap"
       >
         Nodes
       </button>
       <button
         type="button"
         onClick={() => scrollTo('dossier')}
-        className="shrink-0 px-3 py-1.5 rounded-xs font-medium dark:bg-surface-card bg-white border dark:border-border-hairline border-[#E7E8ED] dark:text-text-secondary text-[#52525B] whitespace-nowrap"
+        className="shrink-0 inline-flex flex-row items-center justify-center px-3 py-1.5 rounded-xs font-medium dark:bg-surface-card bg-white border dark:border-border-hairline border-[#E7E8ED] dark:text-text-secondary text-[#52525B] whitespace-nowrap"
       >
         Dossier
       </button>
       <button
         type="button"
         onClick={() => scrollTo('matrix')}
-        className="shrink-0 px-3 py-1.5 rounded-xs font-medium dark:bg-surface-card bg-white border dark:border-border-hairline border-[#E7E8ED] dark:text-text-secondary text-[#52525B] whitespace-nowrap"
+        className="shrink-0 inline-flex flex-row items-center justify-center px-3 py-1.5 rounded-xs font-medium dark:bg-surface-card bg-white border dark:border-border-hairline border-[#E7E8ED] dark:text-text-secondary text-[#52525B] whitespace-nowrap"
       >
         Matrix
       </button>
       <button
         type="button"
         onClick={() => scrollTo('telemetry')}
-        className="shrink-0 px-3 py-1.5 rounded-xs font-medium dark:bg-surface-card bg-white border dark:border-border-hairline border-[#E7E8ED] dark:text-text-secondary text-[#52525B] whitespace-nowrap"
+        className="shrink-0 inline-flex flex-row items-center justify-center px-3 py-1.5 rounded-xs font-medium dark:bg-surface-card bg-white border dark:border-border-hairline border-[#E7E8ED] dark:text-text-secondary text-[#52525B] whitespace-nowrap"
       >
         Telemetry
       </button>

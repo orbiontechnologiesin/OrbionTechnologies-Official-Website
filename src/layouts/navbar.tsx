@@ -161,7 +161,7 @@ export function Navbar() {
             {session?.user ? (
               <Link
                 href="/dashboard"
-                className={`inline-flex items-center gap-2 h-9 px-2.5 rounded-xs font-sans text-xs sm:text-[13px] font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-accent whitespace-nowrap shrink-0 ${
+                className={`inline-flex flex-row items-center gap-2 h-9 px-2.5 rounded-xs font-sans text-xs sm:text-[13px] font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-accent whitespace-nowrap shrink-0 ${
                   isDashboardActive
                     ? 'dark:bg-surface-elevated bg-white border border-brand-accent/50 dark:text-white text-[#17181C] shadow-accent-glow'
                     : 'dark:bg-surface-card bg-white border dark:border-border-hairline border-[#E7E8ED] dark:text-text-primary text-[#17181C] hover:dark:border-border-strong hover:border-[#D8DAE2] hover:dark:bg-surface-elevated hover:bg-[#F3F4F7]'
@@ -196,7 +196,7 @@ export function Navbar() {
             {session?.user ? (
               <Link
                 href="/dashboard"
-                className={`inline-flex items-center gap-1.5 h-8 px-2 rounded-xs font-sans text-xs font-medium transition-all duration-150 shrink-0 whitespace-nowrap ${
+                className={`inline-flex flex-row items-center gap-1.5 h-8 px-2 rounded-xs font-sans text-xs font-medium transition-all duration-150 shrink-0 whitespace-nowrap ${
                   isDashboardActive
                     ? 'dark:bg-surface-elevated bg-white border border-brand-accent/50 shadow-accent-glow dark:text-white text-[#17181C]'
                     : 'dark:bg-surface-card bg-white border dark:border-border-hairline border-[#E7E8ED] dark:text-text-primary text-[#17181C]'
@@ -296,7 +296,7 @@ export function Navbar() {
                         </span>
                       </div>
                     </div>
-                    <div className="inline-flex items-center gap-1 font-sans text-xs text-brand-accent font-medium shrink-0 ml-2">
+                    <div className="inline-flex flex-row items-center gap-1 font-sans text-xs text-brand-accent font-medium shrink-0 ml-2">
                       <span>Console</span>
                       <ArrowUpRight className="w-3.5 h-3.5" />
                     </div>
