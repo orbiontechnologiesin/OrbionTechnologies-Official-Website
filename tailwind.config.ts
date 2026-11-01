@@ -12,7 +12,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Tonal Pitch & Void Architecture (90–95% Black/White/Grayscale)
+        // Existing brand tokens (preserved)
         void: '#000000',
         canvas: '#050505',
         surface: {
@@ -30,7 +30,6 @@ const config: Config = {
           strong: '#3F3F46',
           light: '#52525B',
         },
-        // Monochromatic Contrast Typography
         text: {
           pure: '#FFFFFF',
           primary: '#EDEDED',
@@ -38,7 +37,6 @@ const config: Config = {
           muted: '#71717A',
           dim: '#52525B',
         },
-        // Sovereign Brand Accent (5–10% Accent Ratio)
         brand: {
           accent: '#5B4FFF',
           'accent-hover': '#4B3FF0',
@@ -46,6 +44,25 @@ const config: Config = {
           'accent-tint': 'rgba(91, 79, 255, 0.08)',
           cyan: '#00E0D6',
         },
+        // Stitch Design System tokens
+        background: 'var(--background)',
+        'surface-elevated': 'var(--surface-elevated)',
+        'surface-card': 'var(--surface-card)',
+        'surface-inset': 'var(--surface-inset)',
+        'surface-container': 'var(--surface-container)',
+        'surface-container-low': 'var(--surface-container-low)',
+        'surface-container-high': 'var(--surface-container-high)',
+        'border-hover': 'var(--border-hover)',
+        'text-primary': 'var(--text-primary)',
+        'text-secondary': 'var(--text-secondary)',
+        'text-muted': 'var(--text-muted)',
+        'orbion-indigo': 'var(--orbion-indigo)',
+        'orbion-indigo-hover': 'var(--orbion-indigo-hover)',
+        'orbion-cyan': 'var(--orbion-cyan)',
+        success: 'var(--success)',
+        warning: 'var(--warning)',
+        error: 'var(--error)',
+        information: 'var(--information)',
       },
       fontFamily: {
         sans: [
@@ -66,12 +83,11 @@ const config: Config = {
         ],
       },
       borderRadius: {
-        xs: '2px',
-        sm: '4px',
-        DEFAULT: '6px',
+        sm: '6px',
+        DEFAULT: '8px',
         md: '8px',
-        lg: '10px',
-        xl: '12px',
+        lg: '12px',
+        xl: '14px',
         full: '9999px',
       },
       boxShadow: {
@@ -79,6 +95,8 @@ const config: Config = {
         card: '0 4px 20px -2px rgba(0, 0, 0, 0.6)',
         elevated: '0 12px 32px -4px rgba(0, 0, 0, 0.8)',
         'accent-glow': '0 0 24px -4px rgba(91, 79, 255, 0.25)',
+        flyout: '0 4px 16px -2px rgba(0, 0, 0, 0.45)',
+        modal: '0 16px 36px -4px rgba(0, 0, 0, 0.65)',
       },
       letterSpacing: {
         tighter: '-0.04em',
@@ -87,6 +105,64 @@ const config: Config = {
         wide: '0.04em',
         wider: '0.08em',
         widest: '0.12em',
+      },
+      spacing: {
+        'space-3xs': '0.125rem',
+        'space-2xs': '0.25rem',
+        'space-xs': '0.375rem',
+        'space-sm': '0.5rem',
+        'space-md': '0.75rem',
+        'space-lg': '1rem',
+        'space-xl': '1.25rem',
+        'space-2xl': '1.5rem',
+        'space-3xl': '2rem',
+        'space-4xl': '2.5rem',
+        gutter: '1rem',
+        'gutter-sm': '0.75rem',
+        'gutter-lg': '1.5rem',
+        margin: '1.5rem',
+        'margin-sm': '1rem',
+        'margin-lg': '2rem',
+      },
+      fontSize: {
+        'display-xl': '40px',
+        'display-xl-mobile': '30px',
+        'headline-lg': '28px',
+        'headline-lg-mobile': '24px',
+        'headline-md': '22px',
+        'headline-sm': '18px',
+        'title-md': '15px',
+        'body-lg': '15px',
+        'body-md': '14px',
+        'body-sm': '13px',
+        'label-md': '13px',
+        'label-sm': '12px',
+        'caption-xs': '11px',
+        'code-md': '13px',
+        'code-sm': '12px',
+      },
+      lineHeight: {
+        'display-xl': '48px',
+        'display-xl-mobile': '38px',
+        'headline-lg': '36px',
+        'headline-lg-mobile': '32px',
+        'headline-md': '28px',
+        'headline-sm': '24px',
+        'title-md': '22px',
+        'body-lg': '24px',
+        'body-md': '20px',
+        'body-sm': '18px',
+        'label-md': '16px',
+        'label-sm': '16px',
+        'caption-xs': '14px',
+        'code-md': '20px',
+        'code-sm': '16px',
+      },
+      fontWeight: {
+        'normal': '400',
+        'medium': '500',
+        'semibold': '600',
+        'bold': '700',
       },
       keyframes: {
         fadeIn: {
@@ -104,6 +180,15 @@ const config: Config = {
         reveal: {
           '0%': { opacity: '0', transform: 'scale(0.98)' },
           '100%': { opacity: '1', transform: 'scale(1)' },
+        },
+        pulse: {
+          '0%': { opacity: '1' },
+          '50%': { opacity: '0.5' },
+          '100%': { opacity: '1' },
+        },
+        'spin-slow': {
+          '0%': { transform: 'rotate(0deg)' },
+          '100%': { transform: 'rotate(360deg)' },
         },
       },
       animation: {

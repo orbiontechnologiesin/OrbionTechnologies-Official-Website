@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 });
 
 export const viewport: Viewport = {
-  themeColor: '#050505',
+  themeColor: '#08090B',
   colorScheme: 'dark',
   width: 'device-width',
   initialScale: 1,
@@ -171,7 +171,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} font-sans bg-canvas text-text-primary antialiased min-h-screen flex flex-col justify-between selection:bg-brand-accent selection:text-white`}
+        className={`${geistSans.variable} ${geistMono.variable} font-sans bg-background text-text-primary antialiased min-h-screen flex flex-col justify-between selection:bg-brand-accent selection:text-white`}
       >
         {/* Accessibility Skip Link */}
         <a

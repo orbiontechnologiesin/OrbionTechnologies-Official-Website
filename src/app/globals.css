@@ -3,13 +3,54 @@
 @tailwind utilities;
 
 :root {
-  --background: #050505;
-  --foreground: #ededed;
+  /* Stitch Design System - Dark Mode */
+  --background: #08090B;
+  --surface-elevated: #101115;
+  --surface-card: #121419;
+  --surface-inset: #17191F;
+  --surface-container: #1d1f27;
+  --surface-container-low: #191b23;
+  --surface-container-high: #282a32;
+  --border: #262830;
+  --border-hover: #343842;
+  --text-primary: #F5F5F7;
+  --text-secondary: #A1A1AA;
+  --text-muted: #71717A;
+  --orbion-indigo: #5B4FFF;
+  --orbion-indigo-hover: #4E42E8;
+  --orbion-cyan: #00E0D6;
+  --success: #10B981;
+  --warning: #F59E0B;
+  --error: #EF4444;
+  --information: #3B82F6;
+}
+
+:root.light {
+  /* Stitch Design System - Light Mode */
+  --background: #FAFAFC;
+  --surface-elevated: #FFFFFF;
+  --surface-card: #FFFFFF;
+  --surface-inset: #F3F4F7;
+  --surface-container: #F3F4F7;
+  --surface-container-low: #EEEEF6;
+  --surface-container-high: #E7E8ED;
+  --border: #E7E8ED;
+  --border-hover: #D8DAE2;
+  --text-primary: #17181C;
+  --text-secondary: #666A73;
+  --text-muted: #9296A0;
+  --orbion-indigo: #5B4FFF;
+  --orbion-indigo-hover: #4E42E8;
+  --orbion-cyan: #00E0D6;
+  --success: #10B981;
+  --warning: #F59E0B;
+  --error: #EF4444;
+  --information: #3B82F6;
 }
 
 @layer base {
   * {
-    border-color: #1f1f23;
+    border-color: var(--border);
   }
 
   html {
@@ -19,7 +60,7 @@
 
   body {
     background-color: var(--background);
-    color: var(--foreground);
+    color: var(--text-primary);
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -31,22 +72,17 @@
     background-color: #5b4fff;
     color: #ffffff;
   }
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
 }
 
-/* Technical Precision Utilities (Subtle, Non-AI Trope) */
-.bg-tech-grid {
-  background-size: 32px 32px;
-  background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+html.light {
+  color-scheme: light;
 }
 
-.bg-tech-dots {
-  background-size: 24px 24px;
-  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
-}
-
-/* Hairline border effect for instrument-grade cards */
+/* Hairline border effect */
 .border-hairline {
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
@@ -55,29 +91,10 @@
   border: 1px solid rgba(91, 79, 255, 0.3);
 }
 
-/* Custom minimal scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: #050505;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #222226;
-  border-radius: 3px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #333338;
-}
-
-/* Accessibility: Accessible focus rings */
+/* Accessibility: Accessible focus rings - sharp 1px ring per Stitch spec */
 :focus-visible {
-  outline: 2px solid #5b4fff;
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: 0 0 0 1px #5b4fff, 0 0 0 2px rgba(91, 79, 255, 0.1);
 }
 
 /* Accessibility: Respect user reduced motion preferences */
@@ -90,4 +107,9 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* Theme transition for smooth color changes */
+html, body, .surface-card, .surface-elevated, .border, .text-primary, .text-secondary, .text-muted {
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }

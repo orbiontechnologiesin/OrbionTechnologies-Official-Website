@@ -26,16 +26,16 @@ export function LogoutButton() {
 
   return (
     <Button
-      variant="secondary"
+      variant="outline"
       size="sm"
       disabled={loading}
       onClick={handleSignOut}
-      className="gap-2 text-xs font-mono"
+      className="font-sans text-xs gap-1 h-9 bg-surface-container-lowest hover:bg-error-container text-error hover:text-on-error font-medium border-transparent"
     >
       {loading ? (
         <Loader2 className="w-3.5 h-3.5 animate-spin" />
       ) : (
-        <LogOut className="w-3.5 h-3.5 text-text-muted" />
+        <LogOut className="w-3.5 h-3.5" />
       )}
       <span>Sign Out</span>
     </Button>
@@ -105,32 +105,37 @@ export function ProfileEditor({
   return (
     <div>
       <Button
-        variant="secondary"
+        variant="primary"
         size="sm"
         onClick={() => {
           setIsOpen(true);
           setError('');
           setSuccess('');
         }}
-        className="gap-1.5 text-xs font-mono w-full justify-center mt-4 border-border-hairline hover:border-brand-accent/40"
+        className="font-sans text-xs gap-1.5 w-full justify-center mt-2 h-9 bg-orbion-indigo hover:bg-orbion-indigo-hover text-white font-medium"
       >
-        <Edit3 className="w-3.5 h-3.5 text-brand-accent" />
+        <Edit3 className="w-3.5 h-3.5" />
         <span>Update Profile</span>
       </Button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-canvas/80 backdrop-blur-sm animate-fadeIn">
-          <div className="relative w-full max-w-md bg-surface-card border border-border-hairline rounded-sm p-6 shadow-2xl space-y-5">
-            <div className="flex items-center justify-between border-b border-border-hairline pb-3">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-background/80 backdrop-blur-sm"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Edit User Profile"
+        >
+          <div className="relative w-full max-w-md bg-surface-card border border-border rounded-xl p-6 shadow-flyout space-y-4">
+            <div className="flex items-center justify-between border-b border-border pb-2">
               <div className="flex items-center gap-2">
-                <Edit3 className="w-4 h-4 text-brand-accent" />
-                <h3 className="text-sm font-semibold text-text-pure uppercase tracking-wider font-mono">
+                <Edit3 className="w-4 h-4 text-orbion-indigo" />
+                <h3 className="font-title-md text-title-md font-semibold text-text-primary tracking-tight">
                   Edit User Profile
                 </h3>
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="text-text-muted hover:text-text-pure transition-colors"
+                className="text-text-muted hover:text-text-primary transition-colors"
                 aria-label="Close"
               >
                 <X className="w-4 h-4" />
@@ -138,35 +143,35 @@ export function ProfileEditor({
             </div>
 
             {error && (
-              <div className="p-2.5 text-xs font-mono text-red-400 bg-red-950/20 border border-red-900/50 rounded-xs flex items-center gap-2">
-                <ShieldAlert className="w-4 h-4 shrink-0 text-red-400" />
+              <div className="p-2.5 text-xs font-mono text-error bg-error-container/10 border border-error/20 rounded-lg flex items-center gap-1">
+                <ShieldAlert className="w-3 h-3 shrink-0 text-error" />
                 <span>{error}</span>
               </div>
             )}
 
             {success && (
-              <div className="p-2.5 text-xs font-mono text-emerald-400 bg-emerald-950/20 border border-emerald-900/50 rounded-xs flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-400" />
+              <div className="p-2.5 text-xs font-mono text-success bg-success-container/10 border border-success/20 rounded-lg flex items-center gap-1">
+                <CheckCircle2 className="w-3 h-3 shrink-0 text-success" />
                 <span>{success}</span>
               </div>
             )}
 
-            <form onSubmit={handleUpdate} className="space-y-4 text-xs font-mono">
+            <form onSubmit={handleUpdate} className="space-y-3 text-xs">
               <div>
-                <label className="block text-text-secondary uppercase text-[10px] mb-1">
+                <label className="block text-xs text-text-secondary mb-1.5">
                   Full Name
                 </label>
                 <input
                   type="text"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  className="w-full bg-surface-subtle border border-border-hairline rounded-xs px-3 py-2 text-text-pure focus:outline-none focus:border-brand-accent/60"
+                  className="w-full h-9 bg-surface-inset border border-border rounded-lg px-3 py-2 text-text-primary focus:outline-none focus:border-orbion-indigo focus:ring-0"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-text-secondary uppercase text-[10px] mb-1">
+                <label className="block text-xs text-text-secondary mb-1.5">
                   Company / Organization
                 </label>
                 <input
@@ -174,12 +179,12 @@ export function ProfileEditor({
                   value={companyName}
                   onChange={(e) => setCompanyName(e.target.value)}
                   placeholder="e.g. Orbion Technologies"
-                  className="w-full bg-surface-subtle border border-border-hairline rounded-xs px-3 py-2 text-text-pure focus:outline-none focus:border-brand-accent/60"
+                  className="w-full h-9 bg-surface-inset border border-border rounded-lg px-3 py-2 text-text-primary focus:outline-none focus:border-orbion-indigo focus:ring-0"
                 />
               </div>
 
               <div>
-                <label className="block text-text-secondary uppercase text-[10px] mb-1">
+                <label className="block text-xs text-text-secondary mb-1.5">
                   Job Title / Role
                 </label>
                 <input
@@ -187,17 +192,18 @@ export function ProfileEditor({
                   value={jobTitle}
                   onChange={(e) => setJobTitle(e.target.value)}
                   placeholder="e.g. Senior Research Engineer"
-                  className="w-full bg-surface-subtle border border-border-hairline rounded-xs px-3 py-2 text-text-pure focus:outline-none focus:border-brand-accent/60"
+                  className="w-full h-9 bg-surface-inset border border-border rounded-lg px-3 py-2 text-text-primary focus:outline-none focus:border-orbion-indigo focus:ring-0"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-3 border-t border-border-hairline">
+              <div className="flex items-center justify-end gap-2 pt-2 border-t border-border">
                 <Button
                   type="button"
-                  variant="secondary"
+                  variant="outline"
                   size="sm"
                   onClick={() => setIsOpen(false)}
                   disabled={loading}
+                  className="font-sans text-xs"
                 >
                   Cancel
                 </Button>
