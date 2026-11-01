@@ -1,14 +1,21 @@
 import React from 'react';
 import { redirect } from 'next/navigation';
 import { headers } from 'next/headers';
+import Link from 'next/link';
 import { auth } from '@/lib/auth/server';
 import { prisma } from '@/lib/prisma';
-import { DashboardShell } from './components/DashboardShell';
-import { SystemOverview } from './components/SystemOverview';
-import { UserDossier } from './components/UserDossier';
-import { ArchitectureMatrix } from './components/ArchitectureMatrix';
-import { TelemetryPanel } from './components/TelemetryPanel';
-import { CompanyInformation } from './components/CompanyInformation';
+import { Badge, Button } from '@/components/ui';
+import { LogoutButton, ProfileEditor } from './dashboard-client';
+import {
+  Activity,
+  Cpu,
+  Database,
+  ShieldCheck,
+  User as UserIcon,
+  Clock,
+  Terminal,
+  ArrowRight,
+} from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
@@ -40,7 +47,7 @@ export default async function DashboardPage() {
     redirect('/auth/sign-in?callbackUrl=/dashboard');
   }
 
-  // Fetch profile data from PostgreSQL profiles table
+  // Fetch profile data from Supabase PostgreSQL profiles table
   let profile = null;
   try {
     profile = await prisma.profile.findUnique({
@@ -51,43 +58,224 @@ export default async function DashboardPage() {
   }
 
   const displayName = profile?.fullName || user.name || user.email?.split('@')[0] || 'Authenticated User';
-  const sessionExpiresAt = session.expiresAt
-    ? new Date(session.expiresAt).toLocaleString()
-    : null;
 
   return (
-    <DashboardShell
-      userName={displayName}
-      userEmail={user.email}
-      emailVerified={user.emailVerified}
-    >
-      <div className="space-y-5">
-        {/* System Overview Cards */}
-        <SystemOverview />
-
-        {/* Main Asymmetric Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
-          {/* LEFT COLUMN: User Dossier + Company Information (5 cols) */}
-          <div className="lg:col-span-5 flex flex-col gap-5">
-            <UserDossier
-              name={displayName}
-              email={user.email}
-              userId={user.id}
-              emailVerified={user.emailVerified}
-              sessionExpiresAt={sessionExpiresAt}
-              companyName={profile?.companyName ?? null}
-              jobTitle={profile?.jobTitle ?? null}
-            />
-            <CompanyInformation />
+    <div className="min-h-screen bg-canvas pt-24 pb-20 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto space-y-8">
+        {/* Top Header Bar */}
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-6 border-b border-border-hairline">
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <Badge variant="status" indicatorColor="cyan">
+                SUPABASE + BETTER AUTH ACTIVE
+              </Badge>
+              <span className="font-mono text-[10px] text-text-muted">
+                SESSION_ID: {String(session.id || user.id).slice(0, 12)}...
+              </span>
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-semibold text-text-pure tracking-tight">
+              Enterprise Dashboard
+            </h1>
+            <p className="text-xs sm:text-sm text-text-secondary mt-1">
+              Authenticated console for {displayName} ({user.email}).
+            </p>
           </div>
 
-          {/* RIGHT COLUMN: Architecture Matrix + Telemetry Panel (7 cols) */}
-          <div className="lg:col-span-7 flex flex-col gap-5">
-            <ArchitectureMatrix />
-            <TelemetryPanel />
+          <div className="flex items-center gap-3">
+            <Link href="/technology">
+              <Button variant="secondary" size="sm">
+                System Specs
+              </Button>
+            </Link>
+            <LogoutButton />
+          </div>
+        </div>
+
+        {/* System Telemetry Row */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="bg-surface-subtle border border-border-hairline rounded-sm p-5 space-y-2">
+            <div className="flex items-center justify-between text-text-muted">
+              <span className="font-mono text-[11px] uppercase tracking-wider">Cloud Database</span>
+              <Database className="w-4 h-4 text-brand-cyan" />
+            </div>
+            <div className="text-xl font-semibold text-text-pure font-mono">Supabase PostgreSQL</div>
+            <div className="text-[11px] text-text-secondary">
+              Provider: <code className="text-text-muted font-mono">Supabase PostgreSQL</code>
+            </div>
+          </div>
+
+          <div className="bg-surface-subtle border border-border-hairline rounded-sm p-5 space-y-2">
+            <div className="flex items-center justify-between text-text-muted">
+              <span className="font-mono text-[11px] uppercase tracking-wider">Auth Framework</span>
+              <ShieldCheck className="w-4 h-4 text-brand-accent" />
+            </div>
+            <div className="text-xl font-semibold text-text-pure font-mono">Better Auth</div>
+            <div className="text-[11px] text-text-secondary">Self-Hosted Email/Password</div>
+          </div>
+
+          <div className="bg-surface-subtle border border-border-hairline rounded-sm p-5 space-y-2">
+            <div className="flex items-center justify-between text-text-muted">
+              <span className="font-mono text-[11px] uppercase tracking-wider">Session Security</span>
+              <Activity className="w-4 h-4 text-emerald-400" />
+            </div>
+            <div className="text-xl font-semibold text-text-pure font-mono">&lt; 1 ms</div>
+            <div className="text-[11px] text-text-secondary">HTTP-Only SameSite Secure Cookies</div>
+          </div>
+
+          <div className="bg-surface-subtle border border-border-hairline rounded-sm p-5 space-y-2">
+            <div className="flex items-center justify-between text-text-muted">
+              <span className="font-mono text-[11px] uppercase tracking-wider">Autonomous Agents</span>
+              <Cpu className="w-4 h-4 text-purple-400" />
+            </div>
+            <div className="text-xl font-semibold text-text-pure font-mono">Ready</div>
+            <div className="text-[11px] text-text-secondary">Model Context Protocol ready</div>
+          </div>
+        </div>
+
+        {/* Main Content Dossier & Panels */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* User Account Dossier */}
+          <div className="lg:col-span-1 bg-surface-subtle border border-border-hairline rounded-sm p-6 space-y-6">
+            <div className="flex items-center justify-between border-b border-border-hairline pb-4">
+              <div className="flex items-center gap-2">
+                <UserIcon className="w-4 h-4 text-brand-accent" />
+                <h2 className="text-sm font-semibold text-text-pure uppercase tracking-wider font-mono">
+                  User Dossier
+                </h2>
+              </div>
+              <Badge variant="accent" className="text-[10px]">
+                AUTHENTICATED
+              </Badge>
+            </div>
+
+            <div className="space-y-4 text-xs font-mono">
+              <div>
+                <span className="text-text-muted uppercase text-[10px] block mb-1">User Identifier</span>
+                <span className="text-text-pure bg-surface-card px-2 py-1 rounded-xs border border-border-hairline block break-all">
+                  {user.id}
+                </span>
+              </div>
+
+              <div>
+                <span className="text-text-muted uppercase text-[10px] block mb-1">Display Name</span>
+                <span className="text-text-primary block">{displayName}</span>
+              </div>
+
+              {profile?.companyName && (
+                <div>
+                  <span className="text-text-muted uppercase text-[10px] block mb-1">Organization</span>
+                  <span className="text-text-primary block">{profile.companyName}</span>
+                </div>
+              )}
+
+              {profile?.jobTitle && (
+                <div>
+                  <span className="text-text-muted uppercase text-[10px] block mb-1">Title / Role</span>
+                  <span className="text-text-primary block">{profile.jobTitle}</span>
+                </div>
+              )}
+
+              <div>
+                <span className="text-text-muted uppercase text-[10px] block mb-1">Email Endpoint</span>
+                <span className="text-text-primary block break-all">{user.email}</span>
+              </div>
+
+              <div>
+                <span className="text-text-muted uppercase text-[10px] block mb-1">Verification Status</span>
+                {user.emailVerified ? (
+                  <span className="text-emerald-400 flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                    Verified Account
+                  </span>
+                ) : (
+                  <span className="text-text-secondary flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-text-muted" />
+                    Standard Email/Password Account
+                  </span>
+                )}
+              </div>
+
+              {session.expiresAt && (
+                <div>
+                  <span className="text-text-muted uppercase text-[10px] block mb-1">Session Expiration</span>
+                  <div className="text-text-secondary flex items-center gap-1.5">
+                    <Clock className="w-3.5 h-3.5 text-text-muted" />
+                    <span>{new Date(session.expiresAt).toLocaleString()}</span>
+                  </div>
+                </div>
+              )}
+
+              <ProfileEditor
+                initialFullName={displayName}
+                initialCompanyName={profile?.companyName}
+                initialJobTitle={profile?.jobTitle}
+              />
+            </div>
+          </div>
+
+          {/* AI Operating System Shell / Status */}
+          <div className="lg:col-span-2 bg-surface-subtle border border-border-hairline rounded-sm p-6 space-y-6">
+            <div className="flex items-center justify-between border-b border-border-hairline pb-4">
+              <div className="flex items-center gap-2">
+                <Terminal className="w-4 h-4 text-brand-cyan" />
+                <h2 className="text-sm font-semibold text-text-pure uppercase tracking-wider font-mono">
+                  System Architecture Status
+                </h2>
+              </div>
+              <span className="font-mono text-[10px] text-text-muted">ORB-NODE-01</span>
+            </div>
+
+            <div className="space-y-4">
+              <div className="bg-canvas border border-border-hairline rounded-xs p-4 font-mono text-xs space-y-2 text-text-secondary">
+                <p className="text-brand-cyan">$ orbion-os --version</p>
+                <p className="text-text-muted">
+                  &gt; Orbion Technologies Architecture v1.0.0 (Node Next.js 15 / React 19)
+                </p>
+                <p className="text-text-muted">
+                  &gt; Backend Engine: Supabase PostgreSQL + Better Auth
+                </p>
+                <p className="text-emerald-400">
+                  &gt; Session Status: Active session for {user.email}.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                <Link
+                  href="/technology"
+                  className="group p-4 rounded-xs border border-border-hairline hover:border-brand-accent/40 bg-surface-card hover:bg-surface-elevated transition-all flex flex-col justify-between"
+                >
+                  <div className="space-y-1">
+                    <div className="flex items-center justify-between">
+                      <span className="font-mono text-[11px] text-brand-accent">CORE ARCHITECTURE</span>
+                      <ArrowRight className="w-3.5 h-3.5 text-text-muted group-hover:text-text-pure transition-colors" />
+                    </div>
+                    <p className="text-sm font-medium text-text-pure">AI Agent Telemetry</p>
+                    <p className="text-xs text-text-muted">
+                      Inspect multi-node orchestration, MCP protocol bindings, and state persistence.
+                    </p>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/company"
+                  className="group p-4 rounded-xs border border-border-hairline hover:border-brand-accent/40 bg-surface-card hover:bg-surface-elevated transition-all flex flex-col justify-between"
+                >
+                  <div className="space-y-1">
+                    <div className="flex items-center justify-between">
+                      <span className="font-mono text-[11px] text-brand-cyan">ENTERPRISE DOSSIER</span>
+                      <ArrowRight className="w-3.5 h-3.5 text-text-muted group-hover:text-text-pure transition-colors" />
+                    </div>
+                    <p className="text-sm font-medium text-text-pure">Company &amp; Origins</p>
+                    <p className="text-xs text-text-muted">
+                      Review company governance, founder thesis, and architectural roadmaps.
+                    </p>
+                  </div>
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </DashboardShell>
+    </div>
   );
 }

@@ -83,6 +83,3 @@ next-env.d.ts
 .claude/
 .windsurf/
 skills-lock.json
-
-# Brand Design System References (design assets, not source code)
-Orbion Brand Design System/
