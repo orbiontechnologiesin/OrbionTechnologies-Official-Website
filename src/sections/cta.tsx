@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { ArrowRight, CheckCircle2 } from 'lucide-react';
 import { Section, Container, Badge, Display, Body, Caption, Button } from '@/components/ui';
+import { COMPANY } from '@/data/company';
 
 export function CtaSection() {
   const [email, setEmail] = useState('');
@@ -62,10 +63,10 @@ export function CtaSection() {
           <span>DIRECT FOUNDER DIALOGUE</span>
           <span>•</span>
           <a
-            href="mailto:exobhavinss@gmail.com"
+            href={`mailto:${COMPANY.emails.founder}`}
             className="text-white hover:text-brand-accent transition-colors underline-offset-4 hover:underline"
           >
-            exobhavinss@gmail.com
+            {COMPANY.emails.founder}
           </a>
         </div>
       </div>

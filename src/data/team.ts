@@ -1,4 +1,5 @@
 import { TeamMember } from '@/types';
+import { COMPANY } from './company';
 import { FOUNDER } from './founder';
 
 export const FOUNDER_MEMBER: TeamMember = {
@@ -40,6 +41,12 @@ export const FOUNDER_MEMBER: TeamMember = {
       label: 'X (Twitter)',
       url: 'https://x.com/BhavinShankur',
       username: '@BhavinShankur',
+    },
+    {
+      platform: 'Email',
+      label: 'Founder Direct',
+      url: `mailto:${COMPANY.emails.founder}`,
+      username: COMPANY.emails.founder,
     },
   ],
   portfolios: [
@@ -94,6 +101,12 @@ export const CTO: TeamMember = {
       label: 'X (Twitter)',
       url: 'https://x.com/apurv2116',
       username: '@apurv2116',
+    },
+    {
+      platform: 'Email',
+      label: 'CTO Direct',
+      url: `mailto:${COMPANY.emails.team}`,
+      username: COMPANY.emails.team,
     },
   ],
   portfolios: [

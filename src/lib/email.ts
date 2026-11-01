@@ -1,4 +1,5 @@
 import { Resend } from 'resend';
+import { COMPANY } from '@/data/company';
 
 // Environment variable configuration
 const resendApiKey = process.env.RESEND_API_KEY;
@@ -196,6 +197,9 @@ function buildVerificationEmailHtml(params: { name?: string | null; verification
         <p style="margin: 0 0 8px;">
           <strong>Security Notice:</strong> If you did not create an account with Orbion Technologies, you can safely ignore this email. No further action is required.
         </p>
+        <p style="margin: 0 0 8px; font-size: 11px; color: #64748B;">
+          Support &amp; Enquiries: <a href="mailto:${COMPANY.emails.general}" style="color: #00E0D6; text-decoration: none;">${COMPANY.emails.general}</a>
+        </p>
         <p style="margin: 0; font-size: 11px; color: #334155;">
           Orbion Technologies Operating Architecture &bull; https://orbiontechnologies.in
         </p>
@@ -223,6 +227,7 @@ ${params.verificationUrl}
 Notice: This verification link expires in 1 hour.
 
 Security Notice: If you did not create an account with Orbion Technologies, you can safely ignore this email.
+Support: ${COMPANY.emails.general}
 
 ---
 Orbion Technologies Operating Architecture
@@ -266,6 +271,7 @@ export async function sendEmailVerification(
 
     const response = await resend.emails.send({
       from: defaultSender,
+      replyTo: COMPANY.emails.general,
       to: [to.trim()],
       subject: 'Verify your email address — Orbion Technologies',
       html,
@@ -335,14 +341,16 @@ export async function sendPasswordResetEmail(
       </a>
     </div>
     <p style="color: #64748B; font-size: 12px;">This link will expire in 1 hour. If you did not request this, please ignore this email.</p>
+    <p style="color: #475569; font-size: 11px; margin-top: 16px;">Support &amp; Enquiries: ${COMPANY.emails.general}</p>
   </div>
 </body>
 </html>`;
 
-    const text = `Reset your Orbion account password\n\nReset Link: ${resetUrl}\n\nExpires in 1 hour.`;
+    const text = `Reset your Orbion account password\n\nReset Link: ${resetUrl}\n\nExpires in 1 hour.\nSupport: ${COMPANY.emails.general}`;
 
     const response = await resend.emails.send({
       from: defaultSender,
+      replyTo: COMPANY.emails.general,
       to: [to.trim()],
       subject: 'Reset your password — Orbion Technologies',
       html,

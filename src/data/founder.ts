@@ -1,4 +1,5 @@
 import { FounderInfo } from '@/types';
+import { COMPANY } from './company';
 
 export const FOUNDER: FounderInfo = {
   name: 'Bhavin Shankur',
@@ -40,9 +41,9 @@ export const FOUNDER: FounderInfo = {
     },
     {
       platform: 'Email',
-      label: 'Personal Inquiries',
-      url: 'mailto:exobhavinss@gmail.com',
-      username: 'exobhavinss@gmail.com',
+      label: 'Founder Direct',
+      url: `mailto:${COMPANY.emails.founder}`,
+      username: COMPANY.emails.founder,
     },
   ],
   portfolios: [

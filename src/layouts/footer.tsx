@@ -109,38 +109,33 @@ export function Footer() {
 
         {/* Contact & Social Proof Matrix */}
         <div className="py-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 border-b border-border-hairline font-sans text-xs">
-          <div className="flex flex-wrap items-center gap-6">
+          <div className="flex flex-wrap items-center gap-4">
             <span className="font-mono uppercase tracking-wider text-text-muted">Contact:</span>
             <a
-              href="mailto:exobhavinss@gmail.com"
+              href={`mailto:${COMPANY.emails.general}`}
               className="text-text-primary hover:text-white transition-colors"
             >
-              exobhavinss@gmail.com
-            </a>
-            <span className="text-border-hairline">•</span>
-            <a
-              href="mailto:bhavinshankur.tech@yahoo.com"
-              className="text-text-primary hover:text-white transition-colors"
-            >
-              bhavinshankur.tech@yahoo.com
+              {COMPANY.emails.general}
             </a>
           </div>
 
           {/* Social Channels */}
           <div className="flex flex-wrap items-center gap-4">
             <span className="font-mono uppercase tracking-wider text-text-muted">Connect:</span>
-            {FOUNDER.links.map((social) => (
-              <a
-                key={social.platform}
-                href={social.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-text-secondary hover:text-white transition-colors"
-              >
-                <span>{social.platform}</span>
-                <ArrowUpRight className="w-3 h-3 text-text-muted" />
-              </a>
-            ))}
+            {FOUNDER.links
+              .filter((social) => social.platform !== 'Email')
+              .map((social) => (
+                <a
+                  key={social.platform}
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-text-secondary hover:text-white transition-colors"
+                >
+                  <span>{social.platform}</span>
+                  <ArrowUpRight className="w-3 h-3 text-text-muted" />
+                </a>
+              ))}
           </div>
         </div>
 

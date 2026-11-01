@@ -109,14 +109,14 @@ export function TeamProfileCard({ member, className }: TeamProfileCardProps) {
           <span className="font-mono text-[10px] uppercase tracking-wider text-text-muted block mb-2.5">
             VERIFIED DIRECT CHANNELS
           </span>
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             {member.links.map((link) => (
               <a
                 key={link.platform}
                 href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`${link.label} profile for ${member.name} (opens in a new tab)`}
+                target={link.url.startsWith('mailto:') ? undefined : '_blank'}
+                rel={link.url.startsWith('mailto:') ? undefined : 'noopener noreferrer'}
+                aria-label={`${link.label} for ${member.name}${link.url.startsWith('mailto:') ? '' : ' (opens in a new tab)'}`}
                 className="p-2.5 rounded-xs bg-void border border-border-hairline hover:border-brand-accent/50 hover:bg-surface-elevated text-center flex flex-col items-center justify-center transition-all duration-150 group/link focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-accent"
               >
                 <div className="flex items-center gap-1 text-text-secondary group-hover/link:text-white">

@@ -34,6 +34,12 @@ export interface FounderInfo {
   portfolios: PortfolioLink[];
 }
 
+export interface CompanyEmails {
+  founder: string;
+  team: string;
+  general: string;
+}
+
 export interface CompanyMeta {
   name: string;
   shortName?: string;
@@ -42,6 +48,7 @@ export interface CompanyMeta {
   domain: string;
   statusBadge: string;
   visionSummary: string;
+  emails: CompanyEmails;
 }
 
 export interface TeamMember {

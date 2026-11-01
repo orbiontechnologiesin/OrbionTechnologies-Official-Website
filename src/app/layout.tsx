@@ -105,6 +105,7 @@ const jsonLd = {
       '@id': `${COMPANY.domain}/#organization`,
       name: COMPANY.name,
       legalName: COMPANY.legalName,
+      email: COMPANY.emails.general,
       url: COMPANY.domain,
       logo: {
         '@type': 'ImageObject',
@@ -114,6 +115,7 @@ const jsonLd = {
         '@type': 'Person',
         name: 'Bhavin Shankur',
         jobTitle: 'Founder & CEO',
+        email: COMPANY.emails.founder,
         sameAs: [
           'https://www.linkedin.com/in/bhavin-shankur-8421a0371',
           'https://github.com/exobhavinss-sketch',
@@ -126,6 +128,7 @@ const jsonLd = {
           '@type': 'Person',
           name: 'Bhavin Shankur',
           jobTitle: 'Founder & CEO',
+        email: COMPANY.emails.founder,
           sameAs: [
             'https://www.linkedin.com/in/bhavin-shankur-8421a0371',
             'https://github.com/exobhavinss-sketch',
@@ -136,6 +139,7 @@ const jsonLd = {
           '@type': 'Person',
           name: 'Apurv Nimbarge',
           jobTitle: 'Chief Technology Officer (CTO)',
+          email: COMPANY.emails.team,
           sameAs: [
             'https://www.linkedin.com/in/apurva-nimbarge-a40310353',
             'https://github.com/Apurva200631',

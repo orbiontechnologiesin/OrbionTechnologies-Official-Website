@@ -351,9 +351,9 @@ export default function TeamPage() {
                 Initiate Dialogue
               </Button>
             </Link>
-            <a href="mailto:exobhavinss@gmail.com">
+            <a href={`mailto:${COMPANY.emails.general}`}>
               <Button variant="secondary" size="md">
-                exobhavinss@gmail.com
+                {COMPANY.emails.general}
               </Button>
             </a>
           </div>

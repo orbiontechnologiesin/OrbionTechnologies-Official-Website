@@ -9,4 +9,11 @@ export const COMPANY: CompanyMeta = {
   statusBadge: 'EARLY ARCHITECTURE • V1.0 PREVIEW',
   visionSummary:
     'Orbion Technologies is building an AI Operating System designed to help modern businesses operate with intelligent, autonomous AI systems capable of understanding objectives, using tools, executing workflows, and coordinating tasks across business functions.',
+  emails: {
+    founder: 'bhavin@orbiontechnologies.in',
+    team: 'apurv@orbiontechnologies.in',
+    general: 'enquiry@orbiontechnologies.in',
+  },
 };
+
+export const COMPANY_EMAILS = COMPANY.emails;

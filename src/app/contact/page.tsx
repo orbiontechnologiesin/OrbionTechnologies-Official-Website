@@ -296,24 +296,28 @@ export default function ContactPage() {
                     </p>
                   </div>
 
-                  <div className="pt-4 border-t border-border-hairline/60 space-y-3">
-                    <span className="font-mono text-[11px] text-text-muted block">PRIMARY EMAIL:</span>
-                    <a
-                      href="mailto:exobhavinss@gmail.com"
-                      className="font-mono text-sm text-text-primary hover:text-brand-cyan transition-colors flex items-center gap-2"
-                    >
-                      <Mail className="w-4 h-4 text-brand-accent" />
-                      exobhavinss@gmail.com
-                    </a>
+                  <div className="pt-4 border-t border-border-hairline/60 space-y-4">
+                    <div>
+                      <span className="font-mono text-[11px] text-text-muted block mb-1">GENERAL ENQUIRIES:</span>
+                      <a
+                        href={`mailto:${COMPANY.emails.general}`}
+                        className="font-mono text-sm text-text-primary hover:text-brand-cyan transition-colors flex items-center gap-2"
+                      >
+                        <Mail className="w-4 h-4 text-brand-accent shrink-0" />
+                        <span>{COMPANY.emails.general}</span>
+                      </a>
+                    </div>
 
-                    <span className="font-mono text-[11px] text-text-muted block pt-2">ALTERNATE INQUIRIES:</span>
-                    <a
-                      href="mailto:bhavinshankur.tech@yahoo.com"
-                      className="font-mono text-sm text-text-primary hover:text-brand-cyan transition-colors flex items-center gap-2"
-                    >
-                      <Mail className="w-4 h-4 text-text-muted" />
-                      bhavinshankur.tech@yahoo.com
-                    </a>
+                    <div>
+                      <span className="font-mono text-[11px] text-text-muted block mb-1">FOUNDER &amp; CEO DIRECT:</span>
+                      <a
+                        href={`mailto:${COMPANY.emails.founder}`}
+                        className="font-mono text-sm text-text-primary hover:text-brand-cyan transition-colors flex items-center gap-2"
+                      >
+                        <Mail className="w-4 h-4 text-brand-cyan shrink-0" />
+                        <span>{COMPANY.emails.founder}</span>
+                      </a>
+                    </div>
                   </div>
 
                   <div className="pt-4 border-t border-border-hairline/60 flex items-center gap-3 text-xs text-text-secondary">

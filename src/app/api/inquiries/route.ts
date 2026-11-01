@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { headers } from 'next/headers';
 import { prisma } from '@/lib/prisma';
 import { auth, isDatabaseConfigured } from '@/lib/auth/server';
+import { COMPANY } from '@/data/company';
 
 export const dynamic = 'force-dynamic';
 
@@ -106,7 +107,7 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           error:
-            'Inquiry database connection is not configured yet. Please email exobhavinss@gmail.com directly.',
+            `Inquiry database connection is not configured yet. Please email ${COMPANY.emails.general} directly.`,
         },
         { status: 503 }
       );

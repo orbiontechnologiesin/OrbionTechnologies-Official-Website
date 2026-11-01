@@ -646,7 +646,12 @@ export default async function DashboardPage() {
                 <span>Solapur, India</span>
               </div>
               <div className="flex items-center gap-3">
-                <span>Domain: {COMPANY.domain}</span>
+                <a
+                  href={`mailto:${COMPANY.emails.general}`}
+                  className="hover:dark:text-white hover:text-[#17181C] transition-colors"
+                >
+                  {COMPANY.emails.general}
+                </a>
                 <span>•</span>
                 <span className="text-brand-accent font-medium">Next.js 15 + Prisma</span>
               </div>
