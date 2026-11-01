@@ -3,18 +3,34 @@
 @tailwind utilities;
 
 :root {
+  --background: #fafafc;
+  --foreground: #17181c;
+}
+
+html.dark {
   --background: #050505;
   --foreground: #ededed;
 }
 
 @layer base {
   * {
+    border-color: #e7e8ed;
+  }
+
+  html.dark * {
     border-color: #1f1f23;
   }
 
   html {
     scroll-behavior: smooth;
+  }
+
+  html.dark {
     color-scheme: dark;
+  }
+
+  html:not(.dark) {
+    color-scheme: light;
   }
 
   body {
@@ -31,6 +47,14 @@
     background-color: #5b4fff;
     color: #ffffff;
   }
+}
+
+/* Smooth Theme Transitions */
+html.theme-transitioning,
+html.theme-transitioning *,
+html.theme-transitioning *::before,
+html.theme-transitioning *::after {
+  transition: background-color 200ms ease-out, border-color 200ms ease-out, color 200ms ease-out !important;
 }
 
 /* Technical Precision Utilities (Subtle, Non-AI Trope) */
@@ -62,7 +86,7 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #050505;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {

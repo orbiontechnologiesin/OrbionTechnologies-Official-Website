@@ -1,11 +1,9 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Menu, X, ArrowUpRight, User as UserIcon } from 'lucide-react';
-import { BRAND_ASSETS } from '@/assets/brand';
 import { PRIMARY_NAV } from '@/data/navigation';
 import { Button, Badge, Logo } from '@/components/ui';
 import { useSession } from '@/lib/auth/client';
@@ -74,15 +72,17 @@ export function Navbar() {
     }
   };
 
+  const isDashboardActive = pathname === '/dashboard';
+
   return (
     <>
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-200 ${
           mobileMenuOpen
-            ? 'bg-canvas border-b border-border-hairline'
+            ? 'dark:bg-canvas bg-[#FAFAFC] border-b dark:border-border-hairline border-[#E7E8ED]'
             : scrolled
-            ? 'bg-canvas/90 backdrop-blur-md border-b border-border-hairline shadow-subtle'
-            : 'bg-canvas/60 backdrop-blur-sm border-b border-border-hairline/50'
+            ? 'dark:bg-canvas/90 bg-[#FAFAFC]/90 backdrop-blur-md border-b dark:border-border-hairline border-[#E7E8ED] shadow-subtle'
+            : 'dark:bg-canvas/60 bg-[#FAFAFC]/75 backdrop-blur-sm border-b dark:border-border-hairline/50 border-[#E7E8ED]/75'
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 md:px-5 lg:px-6 xl:px-8 h-16 sm:h-18 flex items-center justify-between relative">
@@ -98,7 +98,7 @@ export function Navbar() {
 
           {/* Desktop Navigation Links — Centered in the central area */}
           <nav
-            className="hidden md:flex items-center justify-center flex-1 mx-2 lg:mx-6 gap-3.5 lg:gap-6 xl:gap-7 text-sm font-medium text-text-secondary pointer-events-auto"
+            className="hidden md:flex items-center justify-center flex-1 mx-2 lg:mx-6 gap-3.5 lg:gap-6 xl:gap-7 text-sm font-medium pointer-events-auto"
             aria-label="Main Navigation"
           >
             {PRIMARY_NAV.map((link) => {
@@ -109,8 +109,8 @@ export function Navbar() {
                   href={link.href}
                   className={`transition-colors duration-150 py-1 font-sans text-[13px] tracking-normal whitespace-nowrap ${
                     isActive
-                      ? 'text-text-pure font-semibold'
-                      : 'text-text-secondary hover:text-text-pure'
+                      ? 'dark:text-text-pure text-[#17181C] font-semibold'
+                      : 'dark:text-text-secondary text-[#666A73] dark:hover:text-text-pure hover:text-[#17181C]'
                   }`}
                   aria-current={isActive ? 'page' : undefined}
                 >
@@ -128,7 +128,13 @@ export function Navbar() {
 
             {session?.user ? (
               <Link href="/dashboard">
-                <Button variant="secondary" size="sm" className="gap-1.5 font-mono text-xs">
+                <Button
+                  variant={isDashboardActive ? 'accent' : 'secondary'}
+                  size="sm"
+                  className={`gap-1.5 font-mono text-xs ${
+                    isDashboardActive ? 'shadow-accent-glow ring-1 ring-brand-accent/50' : ''
+                  }`}
+                >
                   <UserIcon className="w-3.5 h-3.5 text-brand-cyan" />
                   <span>Dashboard</span>
                 </Button>
@@ -152,7 +158,11 @@ export function Navbar() {
           <div className="flex md:hidden items-center gap-2.5 shrink-0 z-10">
             {session?.user ? (
               <Link href="/dashboard">
-                <Button variant="secondary" size="sm" className="h-8 px-2.5 text-xs font-mono gap-1">
+                <Button
+                  variant={isDashboardActive ? 'accent' : 'secondary'}
+                  size="sm"
+                  className="h-8 px-2.5 text-xs font-mono gap-1"
+                >
                   <UserIcon className="w-3 h-3 text-brand-cyan" />
                   <span>OS</span>
                 </Button>
@@ -168,12 +178,12 @@ export function Navbar() {
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-xs border border-border-hairline text-text-secondary hover:text-white hover:bg-surface-card transition-colors duration-150 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-accent cursor-pointer"
+              className="p-2 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-xs border dark:border-border-hairline border-[#E7E8ED] dark:text-text-secondary text-[#17181C] dark:hover:text-white hover:bg-surface-card transition-colors duration-150 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-brand-accent cursor-pointer"
               aria-expanded={mobileMenuOpen}
               aria-controls="mobile-navigation-menu"
               aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
             >
-              {mobileMenuOpen ? <X className="w-5 h-5 text-text-pure" /> : <Menu className="w-5 h-5 text-text-pure" />}
+              {mobileMenuOpen ? <X className="w-5 h-5 dark:text-text-pure text-[#17181C]" /> : <Menu className="w-5 h-5 dark:text-text-pure text-[#17181C]" />}
             </button>
           </div>
         </div>
@@ -186,7 +196,7 @@ export function Navbar() {
           role="dialog"
           aria-modal="true"
           aria-label="Mobile Navigation Menu"
-          className="md:hidden fixed inset-x-0 top-16 sm:top-18 bottom-0 z-40 bg-canvas overflow-y-auto animate-fade-in"
+          className="md:hidden fixed inset-x-0 top-16 sm:top-18 bottom-0 z-40 dark:bg-canvas bg-[#FAFAFC] overflow-y-auto animate-fade-in"
         >
           <div className="min-h-full flex flex-col justify-between p-6 max-w-lg mx-auto">
             <nav className="flex flex-col space-y-1 pt-2" aria-label="Mobile Navigation">
@@ -201,10 +211,10 @@ export function Navbar() {
                     key={link.label}
                     href={link.href}
                     onClick={(e) => handleNavClick(link.href, e)}
-                    className={`flex items-center justify-between px-3 py-3.5 rounded-xs text-base font-medium transition-colors border-b border-border-hairline/40 min-h-[48px] ${
+                    className={`flex items-center justify-between px-3 py-3.5 rounded-xs text-base font-medium transition-colors border-b dark:border-border-hairline/40 border-[#E7E8ED] min-h-[48px] ${
                       isActive
-                        ? 'text-white bg-surface-card border-l-2 border-brand-accent'
-                        : 'text-text-primary hover:text-white hover:bg-surface-card active:bg-surface-card'
+                        ? 'dark:text-white text-[#17181C] dark:bg-surface-card bg-white border-l-2 border-brand-accent'
+                        : 'dark:text-text-primary text-[#52525B] dark:hover:text-white hover:text-[#17181C] dark:hover:bg-surface-card hover:bg-[#F3F4F7]'
                     }`}
                     aria-current={isActive ? 'page' : undefined}
                   >
@@ -215,7 +225,7 @@ export function Navbar() {
               })}
             </nav>
 
-            <div className="pt-6 mt-6 border-t border-border-hairline flex flex-col gap-3">
+            <div className="pt-6 mt-6 border-t dark:border-border-hairline border-[#E7E8ED] flex flex-col gap-3">
               <div className="flex items-center justify-between text-xs font-mono text-text-muted px-1">
                 <span>ORBION TECHNOLOGIES OS</span>
                 <span className="text-brand-accent">ONLINE</span>
@@ -223,7 +233,11 @@ export function Navbar() {
 
               {session?.user ? (
                 <Link href="/dashboard" onClick={() => setMobileMenuOpen(false)}>
-                  <Button variant="secondary" size="lg" className="w-full justify-center gap-2 font-mono text-xs h-11">
+                  <Button
+                    variant={isDashboardActive ? 'accent' : 'secondary'}
+                    size="lg"
+                    className="w-full justify-center gap-2 font-mono text-xs h-11"
+                  >
                     <UserIcon className="w-4 h-4 text-brand-cyan" />
                     <span>Enter Enterprise Dashboard</span>
                   </Button>
