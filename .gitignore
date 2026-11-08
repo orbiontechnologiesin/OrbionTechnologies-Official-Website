@@ -1,0 +1,158 @@
+# ==============================================================================
+# ORBION TECHNOLOGIES — GIT IGNORE SPECIFICATION
+# ==============================================================================
+# Ensures confidential credentials, environment secrets, build artifacts,
+# developer caches, internal design files, and OS noise are NEVER committed.
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# 1. ENVIRONMENT VARIABLES, SECRETS & CREDENTIALS (CRITICAL)
+# ------------------------------------------------------------------------------
+.env
+.env*
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.staging
+*.env
+*.env.*
+# Keep example environment template tracked for developer onboarding
+!.env.example
+
+# Private keys, certificates, and authentication tokens
+*.pem
+*.key
+*.cert
+*.crt
+*.pfx
+*.p12
+*.keystore
+*.jks
+id_rsa*
+id_ed25519*
+secrets/
+*.secret
+credentials.json
+service-account*.json
+gcp-credentials*.json
+firebase-adminsdk*.json
+
+# ------------------------------------------------------------------------------
+# 2. RAW INTERNAL BRAND ASSETS & DESIGN SOURCE FILES
+# ------------------------------------------------------------------------------
+# Raw design source files, high-res original assets, and mockups.
+# (Production web assets are optimized and served directly from public/brand/)
+Orbion Brand Assets/
+Orbion Brand Assets
+*.sketch
+*.psd
+*.ai
+*.fig
+
+# ------------------------------------------------------------------------------
+# 3. SUPABASE LOCAL STATE & CLI ARTIFACTS
+# ------------------------------------------------------------------------------
+supabase/.temp/
+supabase/.branches/
+.supabase/
+supabase/functions/.env
+
+# ------------------------------------------------------------------------------
+# 4. TESTING, AUTOMATION & BROWSER MCP TOOLS
+# ------------------------------------------------------------------------------
+.playwright-mcp/
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+cypress/videos/
+cypress/screenshots/
+coverage/
+.nyc_output/
+
+# ------------------------------------------------------------------------------
+# 5. NEXT.JS & BUILD OUTPUTS
+# ------------------------------------------------------------------------------
+.next/
+out/
+build/
+dist/
+.turbo/
+.cache/
+.swc/
+*.tsbuildinfo
+next-env.d.ts
+
+# Vercel deployment cache
+.vercel/
+
+# ------------------------------------------------------------------------------
+# 6. DEPENDENCIES & PACKAGE MANAGERS
+# ------------------------------------------------------------------------------
+node_modules/
+.pnp
+.pnp.js
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# ------------------------------------------------------------------------------
+# 7. LOGS & DEBUGGING FILES
+# ------------------------------------------------------------------------------
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ------------------------------------------------------------------------------
+# 8. LOCAL DATABASES, BACKUPS & TEMPORARY FILES
+# ------------------------------------------------------------------------------
+tmp/
+temp/
+*.tmp
+*.bak
+*.backup
+*.dump
+*.sql.gz
+*.sqlite
+*.sqlite3
+*.db
+dump.rdb
+
+# ------------------------------------------------------------------------------
+# 9. IDE, EDITOR & OS METADATA
+# ------------------------------------------------------------------------------
+# Visual Studio Code
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# JetBrains (IntelliJ, WebStorm, etc.)
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# Sublime Text & Vim
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*~
+
+# Operating System Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini

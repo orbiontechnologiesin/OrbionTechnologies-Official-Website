@@ -1,0 +1,43 @@
+/* Orbion Technologies Design Tokens */
+
+:root {
+  /* Brand Palette Candidates */
+  --color-petrol: #173B3F;
+  --color-petrol-dark: #0F282B;
+  --color-petrol-light: #215156;
+  --color-petrol-subtle: #EEF4F4;
+  --color-petrol-surface: #123034;
+
+  --color-limestone: #E7E3D8;
+  --color-limestone-light: #F6F4EF;
+  --color-limestone-muted: #DED9CC;
+  --color-limestone-card: #FFFFFF;
+
+  --color-sage: #B6C9B2;
+  --color-sage-light: #E7ECE5;
+  --color-sage-dark: #6C8568;
+
+  --color-graphite: #242B2C;
+  --color-graphite-dark: #1A1F20;
+  --color-graphite-muted: #536062;
+  --color-graphite-subtle: #7A898B;
+  --color-graphite-border: rgba(36, 43, 44, 0.1);
+
+  --color-copper: #C77D56;
+  --color-copper-hover: #B26C47;
+  --color-copper-subtle: #FBF2EC;
+  --color-copper-border: rgba(199, 125, 86, 0.35);
+
+  --color-pure-white: #FFFFFF;
+
+  /* Semantic Typography & Surfaces */
+  --bg-primary: var(--color-limestone-light);
+  --bg-surface: #FFFFFF;
+  --bg-elevated: var(--color-limestone);
+  --text-primary: var(--color-graphite);
+  --text-muted: var(--color-graphite-muted);
+  --text-subtle: var(--color-graphite-subtle);
+  --border-subtle: rgba(36, 43, 44, 0.08);
+  --border-strong: rgba(36, 43, 44, 0.2);
+}
+

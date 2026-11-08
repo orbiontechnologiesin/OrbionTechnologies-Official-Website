@@ -1,0 +1,45 @@
+# ==============================================================================
+# ORBION TECHNOLOGIES — RENDER INFRASTRUCTURE BLUEPRINT (render.yaml)
+# ==============================================================================
+# Documentation: https://render.com/docs/blueprint-spec
+# Deploy with one click or via Git push on Render.
+# ==============================================================================
+
+services:
+  - type: web
+    name: orbion-technologies-web
+    runtime: node
+    plan: starter
+    region: singapore # Closest low-latency region for Indian and APAC audience (.in)
+    buildCommand: npm ci && npm run build
+    startCommand: npm run start
+    healthCheckPath: /api/health
+    autoDeploy: true
+
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: NEXT_PUBLIC_SITE_URL
+        value: https://orbiontechnologies.in
+      - key: ORBION_CONTACT_EMAIL
+        value: enquiry@orbiontechnologies.in
+      - key: ORBION_SENDER_EMAIL
+        value: Orbion Technologies <notifications@orbiontechnologies.in>
+      # Secrets to provide in Render Dashboard (sync: false prevents exposing values in repo)
+      - key: NEXT_PUBLIC_SUPABASE_URL
+        sync: false
+      - key: NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+        sync: false
+      - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
+        sync: false
+      - key: SUPABASE_SECRET_KEY
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: EMAIL_JOB_SECRET
+        generateValue: true
+      - key: UNSUBSCRIBE_SIGNING_SECRET
+        generateValue: true
+

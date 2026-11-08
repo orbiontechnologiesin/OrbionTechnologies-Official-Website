@@ -1,0 +1,36 @@
+# Git
+.git
+.gitignore
+
+# Node & package managers
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Next.js build output & cache
+.next
+out
+
+# Local Environment Variables & secrets
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Documentation & raw design source assets
+docs
+Orbion Brand Assets
+.playwright-mcp
+
+# Docker files
+Dockerfile
+.dockerignore
+render.yaml
+
+# Testing & scratch scripts
+scripts
+supabase
+
