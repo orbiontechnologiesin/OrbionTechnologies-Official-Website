@@ -2,11 +2,5 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
   "cleanUrls": true,
-  "trailingSlash": false,
-  "crons": [
-    {
-      "path": "/api/jobs/process-email-outbox?secret=4b3423b684134f9e7cc2a72e4d66af8b",
-      "schedule": "*/5 * * * *"
-    }
-  ]
+  "trailingSlash": false
 }
