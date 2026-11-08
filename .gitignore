@@ -43,6 +43,8 @@ firebase-adminsdk*.json
 # ------------------------------------------------------------------------------
 # Raw design source files, high-res original assets, and mockups.
 # (Production web assets are optimized and served directly from public/brand/)
+Orbion Brand Assets/
+Orbion Brand Assets
 *.sketch
 *.psd
 *.ai
