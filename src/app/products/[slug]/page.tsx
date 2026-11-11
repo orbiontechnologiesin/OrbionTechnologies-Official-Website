@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { PRODUCT_DETAILS } from "@/lib/product-detail-data";
+import { getPublicProductBySlug } from "@/services/cms-products.service";
 import { ProductHero } from "@/components/products/detail/ProductHero";
 import { ProductStatus } from "@/components/products/detail/ProductStatus";
 import { ProductOverview } from "@/components/products/detail/ProductOverview";
@@ -27,7 +28,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const product = PRODUCT_DETAILS.find((p) => p.slug === slug);
+  const product = await getPublicProductBySlug(slug);
 
   if (!product) {
     return {
@@ -35,11 +36,14 @@ export async function generateMetadata({
     };
   }
 
+  const isComingSoon = product.status === "COMING SOON";
+  const statusSuffix = isComingSoon ? " (Coming Soon)" : "";
+
   return {
     title: `${product.name} — ${product.headline} | Orbion Technologies`,
     description: product.supportingDescription,
     openGraph: {
-      title: `${product.name} (Coming Soon) | Orbion Technologies`,
+      title: `${product.name}${statusSuffix} | Orbion Technologies`,
       description: product.supportingDescription,
       url: `https://orbiontechnologies.in/products/${product.slug}`,
       siteName: "Orbion Technologies",
@@ -54,7 +58,7 @@ export default async function ProductDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const product = PRODUCT_DETAILS.find((p) => p.slug === slug);
+  const product = await getPublicProductBySlug(slug);
 
   if (!product) {
     notFound();

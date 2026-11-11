@@ -18,7 +18,7 @@ export interface ProductDetail {
   categoryGroup: "Business Operations" | "Artificial Intelligence" | "Data Intelligence";
   headline: string;
   supportingDescription: string;
-  status: "COMING SOON";
+  status: "COMING SOON" | "IN DEVELOPMENT" | "AVAILABLE";
   statusNotice: string;
   overview: {
     context: string[];

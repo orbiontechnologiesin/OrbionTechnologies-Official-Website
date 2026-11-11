@@ -3,10 +3,9 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
-import { TextRepel } from "@/components/ui/text-repel";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { PRODUCTS, PRODUCT_CATEGORIES } from "@/lib/products-data";
-import { ProductVisual } from "./ProductVisuals";
+import { ArrowRight, Sparkles, Layers } from "lucide-react";
 
 export function ProductsCollection() {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
@@ -17,27 +16,23 @@ export function ProductsCollection() {
       : PRODUCTS.filter((p) => p.categoryGroup === selectedCategory);
 
   return (
-    <section id="collection" className="py-20 sm:py-28 lg:py-36 bg-limestone/30 border-b border-graphite/10">
+    <section id="directory" className="py-20 sm:py-24 bg-limestone/40 border-b border-graphite/10">
       <Container>
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-14 lg:mb-20">
-          <div className="max-w-2xl space-y-4">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+          <div className="max-w-2xl space-y-3">
             <ScrollReveal direction="up" delay={0.1}>
               <span className="text-xs font-mono font-semibold uppercase tracking-widest text-copper block">
-                Section 02 &bull; Upcoming Product Portfolio
+                Section 03 &bull; Compact Product Directory
               </span>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-graphite leading-tight mt-2">
-                <TextRepel
-                  text="What we're building."
-                  className="justify-start text-left"
-                />
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight text-graphite mt-1">
+                Ecosystem At a Glance
               </h2>
             </ScrollReveal>
             <ScrollReveal direction="up" delay={0.15}>
-              <p className="text-base sm:text-lg text-graphite-muted leading-relaxed">
-                An evolving collection of software products designed around real business needs. Each product is currently in architectural design and engineering planning.
+              <p className="text-sm sm:text-base text-graphite-muted leading-relaxed">
+                Filter and browse all seven upcoming software products in our engineering roadmap.
               </p>
-              <div className="h-1 w-16 bg-petrol rounded-full mt-4" />
             </ScrollReveal>
           </div>
 
@@ -62,103 +57,86 @@ export function ProductsCollection() {
           </ScrollReveal>
         </div>
 
-        {/* Product Collection Entries */}
-        <div className="space-y-16 lg:space-y-24">
-          {filteredProducts.map((product, index) => {
-            const isEven = index % 2 === 1;
-
+        {/* Product Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredProducts.map((product) => {
             return (
               <ScrollReveal key={product.id} direction="up" delay={0.1}>
-                <article
-                  id={product.id}
-                  className="rounded-3xl bg-pure-white border border-graphite/10 p-6 sm:p-10 lg:p-14 shadow-xs hover:border-petrol/30 hover:shadow-md transition-all duration-300 relative overflow-hidden group"
-                >
-                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
-                    {/* Content Column (Swapped on alternating items for editorial rhythm) */}
-                    <div
-                      className={`lg:col-span-6 space-y-6 ${
-                        isEven ? "lg:order-2" : "lg:order-1"
-                      }`}
-                    >
-                      {/* Top Meta: Number, Category & Conspicuous COMING SOON Badge */}
-                      <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-graphite/10">
-                        <div className="flex items-center gap-2.5">
-                          <span className="text-base font-mono font-bold text-copper">
-                            {product.number}
-                          </span>
-                          <span className="text-graphite/30 text-xs font-mono">/</span>
-                          <span className="text-xs font-mono tracking-wider uppercase text-graphite-muted font-medium">
-                            {product.category}
-                          </span>
-                        </div>
-
-                        {/* Conspicuous Coming Soon Badge */}
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-copper/15 border border-copper/35 text-copper text-xs font-mono font-bold tracking-wider">
-                          <span className="h-1.5 w-1.5 rounded-full bg-copper animate-pulse" />
-                          <span>COMING SOON</span>
+                <article className="h-full rounded-2xl bg-pure-white border border-graphite/10 p-6 shadow-xs hover:border-petrol/40 hover:shadow-md transition-all duration-300 flex flex-col justify-between group">
+                  <div className="space-y-4">
+                    {/* Top Meta */}
+                    <div className="flex items-center justify-between pb-3 border-b border-graphite/10 text-xs font-mono">
+                      <div className="flex items-center gap-2">
+                        <span className="font-bold text-copper">{product.number}</span>
+                        <span className="text-graphite/20">/</span>
+                        <span className="text-graphite-muted uppercase tracking-wider text-[11px] truncate max-w-[130px]">
+                          {product.categoryGroup}
                         </span>
                       </div>
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-copper/10 border border-copper/30 text-copper text-[10px] font-bold">
+                        COMING SOON
+                      </span>
+                    </div>
 
-                      {/* Product Name & Tagline */}
-                      <div className="space-y-2">
-                        <h3 className="text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight text-graphite group-hover:text-petrol transition-colors">
-                          {product.name}
-                        </h3>
-                        <p className="text-sm sm:text-base font-medium text-copper font-mono">
-                          &ldquo;{product.tagline}&rdquo;
-                        </p>
-                      </div>
-
-                      {/* Short Description */}
-                      <p className="text-base text-graphite-muted leading-relaxed">
-                        {product.shortDescription}
+                    {/* Title & Tagline */}
+                    <div>
+                      <h3 className="text-xl font-semibold tracking-tight text-graphite group-hover:text-petrol transition-colors">
+                        {product.name}
+                      </h3>
+                      <p className="text-xs font-mono font-medium text-copper mt-1">
+                        &ldquo;{product.tagline}&rdquo;
                       </p>
-
-                      {/* Planned Capabilities */}
-                      <div className="space-y-3 pt-2">
-                        <span className="text-xs font-mono uppercase tracking-widest text-petrol font-semibold block">
-                          Planned Capabilities &bull; Architectural Scope
-                        </span>
-                        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-mono text-graphite">
-                          {product.plannedCapabilities.map((cap) => (
-                            <li
-                              key={cap}
-                              className="flex items-start gap-2 p-2 rounded bg-limestone-light/60 border border-graphite/5"
-                            >
-                              <span className="text-copper font-bold">&rsaquo;</span>
-                              <span className="text-graphite-muted">{cap}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-
-                      {/* Product Status Explanatory Note & Specification Link */}
-                      <div className="pt-4 border-t border-graphite/10 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
-                        <Link
-                          href={`/products/${product.id}`}
-                          className="inline-flex items-center gap-1.5 font-bold uppercase tracking-wider text-petrol hover:text-copper transition-colors group/link"
-                        >
-                          <span>Explore Specification</span>
-                          <span className="transition-transform group-hover/link:translate-x-1">&rarr;</span>
-                        </Link>
-                        <span className="text-graphite-muted/70">PRE-RELEASE ONLY</span>
-                      </div>
                     </div>
 
-                    {/* Conceptual Visual Column */}
-                    <div
-                      className={`lg:col-span-6 ${
-                        isEven ? "lg:order-1" : "lg:order-2"
-                      }`}
+                    {/* Description */}
+                    <p className="text-xs sm:text-sm text-graphite-muted leading-relaxed line-clamp-3">
+                      {product.shortDescription}
+                    </p>
+
+                    {/* Capabilities count */}
+                    <div className="pt-2 flex items-center gap-2 text-xs font-mono text-graphite-muted/80">
+                      <Layers className="w-3.5 h-3.5 text-petrol" />
+                      <span>{product.plannedCapabilities.length} Planned Subsystems</span>
+                    </div>
+                  </div>
+
+                  {/* Footer Link */}
+                  <div className="pt-5 mt-4 border-t border-graphite/10 flex items-center justify-between text-xs font-mono">
+                    <Link
+                      href={`/products/${product.id}`}
+                      className="inline-flex items-center gap-1.5 font-bold uppercase tracking-wider text-petrol hover:text-copper transition-colors group/link"
                     >
-                      <ProductVisual productId={product.id} />
-                    </div>
+                      <span>Explore Specification</span>
+                      <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover/link:translate-x-1" />
+                    </Link>
+                    <span className="text-[10px] text-graphite-muted/60">PRE-RELEASE</span>
                   </div>
                 </article>
               </ScrollReveal>
             );
           })}
         </div>
+
+        {/* Prominent Coming Soon Statement Banner */}
+        <ScrollReveal direction="up" delay={0.2}>
+          <div className="mt-12 p-6 rounded-2xl bg-petrol text-limestone-light border border-petrol-light flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2 text-xs font-mono text-copper font-bold uppercase tracking-wider">
+                <Sparkles className="w-4 h-4" />
+                <span>Pre-Release Architecture Notice</span>
+              </div>
+              <p className="text-xs sm:text-sm text-limestone-muted max-w-2xl">
+                All seven Orbion software products are in active architectural design and pre-release engineering. Features, capabilities, and delivery timelines are subject to refinement as our team builds towards public availability.
+              </p>
+            </div>
+            <Link
+              href="#products-hero"
+              className="text-xs font-mono text-copper hover:text-white transition-colors uppercase font-bold shrink-0"
+            >
+              Back to Top &uarr;
+            </Link>
+          </div>
+        </ScrollReveal>
       </Container>
     </section>
   );

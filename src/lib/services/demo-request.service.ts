@@ -4,6 +4,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { getServerEnv } from "@/lib/env";
 import { generateReference } from "@/lib/security/spam-protection";
 import { enqueueOutboxEmail } from "@/lib/email/outbox";
+import { createAdminNotification } from "@/services/admin-notifications.service";
 import { PRODUCTS } from "@/lib/products-data";
 import type { DemoRequestValidated } from "@/lib/validation/demo-request.schema";
 
@@ -52,6 +53,20 @@ export async function submitDemoRequest(
   if (insertError || !requestRecord) {
     console.error("[Orbion Demo Service] Database insert error:", insertError);
     throw new Error("Failed to save demo request to database.");
+  }
+
+  // Administrative In-App Notification (non-blocking)
+  try {
+    await createAdminNotification({
+      category: "demo",
+      title: "New Demo Request",
+      message: `${validatedData.canonicalFullName} requested demo for ${productName}`,
+      relatedEntityType: "demo_request",
+      relatedEntityId: requestRecord.id,
+      linkUrl: `/admin/leads`,
+    });
+  } catch (notifErr) {
+    console.warn("[Orbion Demo Service] Notification dispatch warning:", notifErr);
   }
 
   // 2. Enqueue Outbound Emails

@@ -17,8 +17,10 @@ export function Navbar() {
   const isServicesPage = pathname === "/services";
   const isPricingPage = pathname === "/pricing";
   const isContactPage = pathname === "/contact";
+  const isBlogPage = pathname === "/blog" || (pathname ? pathname.startsWith("/blog/") : false);
+  const isCaseStudiesPage = pathname === "/case-studies" || (pathname ? pathname.startsWith("/case-studies/") : false);
   const isSubPage =
-    isAboutPage || isProductsPage || isSolutionsPage || isIndustriesPage || isServicesPage || isPricingPage || isContactPage;
+    isAboutPage || isProductsPage || isSolutionsPage || isIndustriesPage || isServicesPage || isPricingPage || isContactPage || isBlogPage || isCaseStudiesPage;
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);

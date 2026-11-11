@@ -36,3 +36,5 @@ export function createClient(): SupabaseClient<Database> {
   return browserClient;
 }
 
+export { createClient as createBrowserClient };
+

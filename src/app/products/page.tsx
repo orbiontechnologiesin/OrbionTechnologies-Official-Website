@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { ProductsHero } from "@/components/products/ProductsHero";
+import { ProductFlipStack } from "@/components/products/ProductFlipStack";
 import { ProductsCollection } from "@/components/products/ProductsCollection";
 import { ProductsApproach } from "@/components/products/ProductsApproach";
 import { ProductsClosingCTA } from "@/components/products/ProductsClosingCTA";
@@ -47,10 +48,13 @@ export default function ProductsPage() {
         {/* SECTION 01 — PRODUCTS HERO */}
         <ProductsHero />
 
-        {/* SECTION 02 & 03 — PRODUCT COLLECTION & CATEGORIES */}
+        {/* SECTION 02 — CASE STUDY FLIP STACK PRODUCT SHOWCASE */}
+        <ProductFlipStack />
+
+        {/* SECTION 03 — COMPACT PRODUCT DIRECTORY & ROADMAP */}
         <ProductsCollection />
 
-        {/* SECTION 04 — OUR APPROACH */}
+        {/* SECTION 04 — OUR ENGINEERING APPROACH */}
         <ProductsApproach />
 
         {/* SECTION 05 — CLOSING STATEMENT */}
@@ -62,4 +66,3 @@ export default function ProductsPage() {
     </div>
   );
 }
-

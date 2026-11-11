@@ -50,8 +50,8 @@ export function ProductsHero() {
             {/* CTAs */}
             <ScrollReveal direction="up" delay={0.35}>
               <div className="flex flex-wrap items-center gap-4 pt-2">
-                <Button href="#collection" variant="petrol" size="lg">
-                  Explore Upcoming Products &darr;
+                <Button href="#product-showcase" variant="petrol" size="lg">
+                  Explore Product Showcase &darr;
                 </Button>
                 <Button href="#approach" variant="secondary" size="lg">
                   Our Engineering Approach &rarr;

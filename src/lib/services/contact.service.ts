@@ -4,6 +4,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { getServerEnv } from "@/lib/env";
 import { generateReference, hashClientIp } from "@/lib/security/spam-protection";
 import { enqueueOutboxEmail } from "@/lib/email/outbox";
+import { createAdminNotification } from "@/services/admin-notifications.service";
 import type { ContactSubmissionValidated } from "@/lib/validation/contact.schema";
 
 export interface ContactServiceResult {
@@ -53,6 +54,20 @@ export async function submitContactEnquiry(
   if (insertError || !lead) {
     console.error("[Orbion Contact Service] Database insert error:", insertError);
     throw new Error("Failed to save enquiry to database.");
+  }
+
+  // Administrative In-App Notification (non-blocking)
+  try {
+    await createAdminNotification({
+      category: "lead",
+      title: "New Customer Enquiry",
+      message: `${validatedData.canonicalFullName} submitted: "${validatedData.subject}"`,
+      relatedEntityType: "contact_lead",
+      relatedEntityId: lead.id,
+      linkUrl: `/admin/leads/${lead.id}`,
+    });
+  } catch (notifErr) {
+    console.warn("[Orbion Contact Service] Notification dispatch warning:", notifErr);
   }
 
   // 2. Enqueue Outbound Emails (Non-blocking failure pattern)

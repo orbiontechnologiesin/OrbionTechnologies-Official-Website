@@ -4,6 +4,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { getServerEnv } from "@/lib/env";
 import { generateUnsubscribeToken, verifyUnsubscribeToken } from "@/lib/security/tokens";
 import { enqueueOutboxEmail } from "@/lib/email/outbox";
+import { createAdminNotification } from "@/services/admin-notifications.service";
 import type { NewsletterSubscriptionValidated } from "@/lib/validation/newsletter.schema";
 
 export interface NewsletterServiceResult {
@@ -79,6 +80,20 @@ export async function subscribeToNewsletter(
     if (insertError) {
       console.error("[Orbion Newsletter] Insert error:", insertError);
       throw new Error("Unable to complete subscription at this time.");
+    }
+
+    // In-app administrative notification (non-blocking)
+    try {
+      await createAdminNotification({
+        category: "newsletter",
+        title: "New Newsletter Subscriber",
+        message: `${normalizedEmail} opted in via ${validatedData.source || "website"}`,
+        relatedEntityType: "newsletter",
+        relatedEntityId: newSub?.id,
+        linkUrl: "/admin/newsletter",
+      });
+    } catch (notifErr) {
+      console.warn("[Orbion Newsletter] Notification warning:", notifErr);
     }
 
     // Enqueue welcome/confirmation email
